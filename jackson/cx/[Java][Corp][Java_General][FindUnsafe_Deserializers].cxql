@@ -1,0 +1,50 @@
+result = base.Find_Unsafe_Deserializers();
+
+/**
+ *  Update: pedric.kng@checkmarx.com 04-JUL-2018 - Extending the query to find FasterXML/Jackson unsafe deserialization
+ */
+
+// blacklisted classes e.g., Object, Serializable, Classes annotated with @JsonTypeInfo(use=Id.CLASS)
+string[] strType = new string[]{
+	"Object", "Serializable"};
+HashSet<string> blacklistedTypeNames = new HashSet<string>(strType);
+
+CxList blacklisted = All.NewCxList();
+blacklisted.Add(All.InheritsFrom("Object"));
+blacklisted.Add(All.InheritsFrom("Serializable"));
+blacklisted.Add(All.InheritsFrom("Comparable"));
+
+// Find mapper class annotated with @JsonTypeInfo(use=Id.CLASS)
+CxList jacksonAnnotatedClazz = All.GetClass(Find_CustomAttribute().FindByCustomAttribute("JsonTypeInfo"));
+CxList containsClassIdAnnotatedClazz = All.GetClass(All.FindByMemberAccess("Id.CLASS").GetTargetOfMembers());
+CxList containsMinimalClassIdAnnotatedClazz = All.GetClass(All.FindByMemberAccess("Id.MINIMAL_CLASS").GetTargetOfMembers());
+
+blacklisted.Add(jacksonAnnotatedClazz * containsClassIdAnnotatedClazz);
+blacklisted.Add(jacksonAnnotatedClazz * containsMinimalClassIdAnnotatedClazz);
+blacklisted.Add(All.InheritsFrom(blacklisted));
+
+// deserialize methods using FasterXML/Jackson
+CxList methods = Find_Methods();
+CxList readMappers = methods.FindByMemberAccess("ObjectMapper.read*");
+
+// Find mapper methods using blacklisted typenames or classes
+foreach (CxList mapper in readMappers){
+	CxList definition = All.FindDefinition(mapper.GetAssignee());
+	Declarator decl = definition.TryGetCSharpGraph<Declarator>();
+	
+	if(decl != null){
+		//cxLog.WriteDebugMessage(decl.TypeName);
+		CxList clazz = Find_Class_Decl().FindByShortName(decl.TypeName);
+				
+		// in blacklisted clazz type name
+		if(blacklistedTypeNames.Contains(decl.TypeName)){
+			result.Add(mapper);
+		}else if(clazz < blacklisted){ // Not in blacklisted clazz
+			result.Add(mapper);
+		}
+	}
+}
+
+// Detect mapper with default typing enabled mapper.enableDefaultTyping()
+CxList oMapper = methods.FindByMemberAccess("ObjectMapper.enableDefaultTyping").GetTargetOfMembers();
+result.Add(readMappers.GetMembersWithTargets(All.FindAllReferences(oMapper)));
