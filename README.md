@@ -4,7 +4,7 @@ Updated:  09 July 2018
 ***
 
 # Queries
-* [Jackson/FasterXML: Command injection via deserialization](##jacksonfasterxml-command-injection-via-deserialization)  
+* [Jackson/FasterXML: Command injection via deserialization](#jacksonfasterxml-command-injection-via-deserialization)  
 
 ***
 ## Jackson/FasterXML: Command injection via deserialization
