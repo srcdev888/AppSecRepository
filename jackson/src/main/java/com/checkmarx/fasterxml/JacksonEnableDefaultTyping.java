@@ -11,7 +11,6 @@ public class JacksonEnableDefaultTyping {
 	// Vulnerable: enableDefaultTyping
 	public void enableDefaultTyping(String json) throws Exception {
 		
-		// AVOID enabling default typing
 	    ObjectMapper om = new ObjectMapper();
 	    om.enableDefaultTyping();
 	    Object o = om.readValue(json, List.class);
