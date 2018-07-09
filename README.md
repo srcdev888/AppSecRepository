@@ -4,7 +4,7 @@ Updated:  09 July 2018
 ***
 
 # Queries
-* [Jackson/FasterXML: Command injection via deserialization](#Jackson/FasterXML: Command injection via deserialization)
+* [Jackson/FasterXML: Command injection via deserialization](#Jackson/FasterXML:-Command-injection-via-deserialization)  
 
 ***
 ## Jackson/FasterXML: Command injection via deserialization
@@ -49,8 +49,6 @@ Jackson Polymorphic Deserialization [[1]]
 Blog on Jackson usage best practices [[2]]  
 Jackson deserialization exploit [[3]]  
 
-[1]:https://medium.com/@cowtowncoder/on-jackson-cves-dont-panic-here-is-what-you-need-to-know-54cd0d6e8062 "Best practices"
-
-[2]:https://github.com/FasterXML/jackson-docs/wiki/JacksonPolymorphicDeserialization "Official Documentation"
-
-[3]: https://blog.hackeriet.no/understanding-jackson-deserialization-exploits/ "Exploit"
+[1]:https://github.com/FasterXML/jackson-docs/wiki/JacksonPolymorphicDeserialization "Official Documentation"
+[2]:https://medium.com/@cowtowncoder/on-jackson-cves-dont-panic-here-is-what-you-need-to-know-54cd0d6e8062 "Best practices"
+[3]:https://blog.hackeriet.no/understanding-jackson-deserialization-exploits/ "Jackson Deserialization Exploit"
