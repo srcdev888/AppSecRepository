@@ -1,0 +1,68 @@
+<web-app 
+    xmlns="http://java.sun.com/xml/ns/javaee" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" 
+    version="3.0">
+    
+	<display-name>Archetype Created Web Application</display-name>
+
+	<listener>
+		<listener-class>com.concretepage.ContextListener</listener-class>
+	</listener>
+	
+	<servlet>
+		<servlet-name>UserControllerServlet</servlet-name>
+		<servlet-class>com.concretepage.user.UserControllerServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>UserControllerServlet</servlet-name>
+		<url-pattern>/user</url-pattern>
+		<url-pattern>/user/list</url-pattern>
+		<url-pattern>/user/new</url-pattern>
+		<url-pattern>/user/delete</url-pattern>
+		<url-pattern>/user/update</url-pattern>
+		<url-pattern>/user/insert</url-pattern>
+		<url-pattern>/user/edit</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>BlogControllerServlet</servlet-name>
+		<servlet-class>com.concretepage.blog.BlogControllerServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>BlogControllerServlet</servlet-name>
+		<url-pattern>/blog</url-pattern>
+		<url-pattern>/blog/list</url-pattern>
+		<url-pattern>/blog/new</url-pattern>
+		<url-pattern>/blog/delete</url-pattern>
+		<url-pattern>/blog/update</url-pattern>
+		<url-pattern>/blog/insert</url-pattern>
+		<url-pattern>/blog/edit</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>VillageControllerServlet</servlet-name>
+		<servlet-class>com.concretepage.village.VillageControllerServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>VillageControllerServlet</servlet-name>
+		<url-pattern>/village</url-pattern>
+		<url-pattern>/village/list</url-pattern>
+		<url-pattern>/village/new</url-pattern>
+		<url-pattern>/village/delete</url-pattern>
+		<url-pattern>/village/update</url-pattern>
+		<url-pattern>/village/insert</url-pattern>
+		<url-pattern>/village/edit</url-pattern>
+		<url-pattern>/village/search</url-pattern>
+		<url-pattern>/village/search2</url-pattern>
+	</servlet-mapping>
+
+	<error-page>
+		<exception-type>java.lang.Exception</exception-type>
+		<location>/Error.jsp</location>
+	</error-page>
+
+</web-app>

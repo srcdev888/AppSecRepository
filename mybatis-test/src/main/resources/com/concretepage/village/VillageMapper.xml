@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.concretepage.village.VillageMapper">
+
+	<!-- type referenced by alias in MyBatis configuration file -->
+	<resultMap id="villageResult" type="village">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="district" column="district" />
+		<result property="country" column="country" />
+	</resultMap>
+	
+	<select id="selectVillages" resultMap="villageResult" >
+		SELECT * from village
+	</select>
+	
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		 id, name, district, country
+	</sql>
+	
+	<!-- type referenced by full package name in MyBatis configuration file -->
+	<select id="selectVillage" resultType="com.concretepage.village.Village" parameterType="int">
+		SELECT 
+		<include refid="Base_Column_List" />
+		FROM village 
+		WHERE id = #{id}
+	</select>
+	
+	<!--
+	<select id="selectVillage" resultType="village" parameterType="int"
+		resultMap="villageResult">
+		SELECT id, name, district from village WHERE id = #{id}
+	</select>
+	-->
+	
+	<!-- Vulnerable Queries -->
+	<select id="selectVillageByName" parameterType="String"
+		resultMap="villageResult">
+		SELECT id, name, district, country from village WHERE name like '${_parameter}'
+	</select>
+	
+	
+	<!-- Vulnerable Queries -->
+	<!-- Mixed usage of 'include' and 'dynamic sql' -->
+	<select id="selectVillageByCountryAndDistrict"
+		parameterType="com.concretepage.village.LocationDataEntity"
+		resultMap="villageResult">
+		SELECT 
+		<include refid="Base_Column_List" />
+		FROM village 
+		<where>
+			<if test="country != null ">
+				 AND country like #{country}
+			</if>
+			<if test="district != null ">
+				 AND district like '${district}'
+			</if>
+		</where>
+	</select>
+		
+	<insert id="insertVillage" parameterType="village" keyProperty="id"
+		useGeneratedKeys="true">
+		INSERT into village(name, district, country) VALUES(#{name}, #{district}, #{country})
+	</insert>
+	
+	<update id="updateVillage" parameterType="village">
+		UPDATE village SET
+		name = #{name}, district = #{district}, country = #{country} WHERE id = #{id}
+	</update>
+	
+	<delete id="deleteVillage" parameterType="int">
+		DELETE FROM village	WHERE id = #{id}
+	</delete>
+</mapper> 

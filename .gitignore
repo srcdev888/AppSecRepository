@@ -4,3 +4,9 @@
 
 /jackson/.classpath
 /jackson/.project
+/mybatis-test/.settings
+
+/mybatis-test/target
+
+/mybatis-test/.classpath
+/mybatis-test/.project
