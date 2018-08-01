@@ -18,6 +18,7 @@ import com.concretepage.SqlSessionFactoryManager;
 import com.concretepage.Utility;
 import com.concretepage.blog.Blog;
 import com.concretepage.blog.BlogService;
+import com.concretepage.village.Village;
 
 public class UserControllerServlet extends HttpServlet {
 	
@@ -62,6 +63,10 @@ public class UserControllerServlet extends HttpServlet {
 	            case "/user/update":
 	                updateUser(request, response);
 	                break;
+	            
+	            case "/user/search":
+	            	searchByName(request, response);
+	            	break;
 	                
 	            default:
 	                listUsers(request, response);
@@ -150,4 +155,20 @@ public class UserControllerServlet extends HttpServlet {
         userService.updateUser(user);
         response.sendRedirect("/user/list");
     }
+	
+	private void searchByName(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+		String firstName = request.getParameter("firstName");
+        
+		List<User> users = userService.getUserByFirstName(firstName);
+		
+		request.setAttribute("users", users);
+        request.getRequestDispatcher("/user/list.jsp").forward(request,  response);
+		
+        /*
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/village/form.jsp");
+        request.setAttribute("village", village);
+        dispatcher.forward(request, response);
+        */
+	}
 }

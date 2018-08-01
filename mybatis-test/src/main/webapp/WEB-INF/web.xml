@@ -24,6 +24,7 @@
 		<url-pattern>/user/update</url-pattern>
 		<url-pattern>/user/insert</url-pattern>
 		<url-pattern>/user/edit</url-pattern>
+		<url-pattern>/user/search</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>

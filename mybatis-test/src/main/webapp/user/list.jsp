@@ -45,6 +45,28 @@
             </c:forEach>
             </c:if>
         </table>
-    </div>   
+    </div>
+    <div>
+    	<form action="/user/search" method="post">
+    	<table border="1" cellpadding="5">
+    	<caption>
+                <h2>
+                Search By First Name
+                </h2>
+            </caption>
+             <tr>
+                <th>Name: </th>
+                <td>
+                    <input type="text" name="firstName" size="45" />
+                </td>
+            </tr>
+    		<tr>
+                <td colspan="2" align="center">
+                    <input type="submit" value="Search" />
+                </td>
+            </tr>
+        </table>
+    	</form>
+    </div>
 </body>
 </html>

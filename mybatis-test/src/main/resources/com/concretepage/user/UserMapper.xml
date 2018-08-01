@@ -24,6 +24,12 @@
     <result property='lastName' column='last_name'/>   
    </resultMap>
 
+  <!-- Vulnerable Queries -->
+  <select id='getUserByFirstname' parameterType="String" resultMap='UserResult'>
+   SELECT * FROM users 
+   WHERE first_name like '${_parameter}'
+  </select>
+
   <select id='getAllUsers' resultMap='UserResult'>
    SELECT * FROM users
   </select>

@@ -14,5 +14,5 @@ public interface UserMapper {
 
 	public void deleteUser(Integer userId);
 
-
+	public List<User> getUserByFirstname(String firstname);
 }

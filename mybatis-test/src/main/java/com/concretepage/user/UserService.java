@@ -38,6 +38,16 @@ public class UserService {
 			sqlSession.close();
 		}
 	}
+	
+	public List<User> getUserByFirstName(String firstname) {
+		SqlSession sqlSession = SqlSessionFactoryManager.getSqlSessionFactory().openSession();
+		try {
+			UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+			return userMapper.getUserByFirstname(firstname);
+		} finally {
+			sqlSession.close();
+		}
+	}
 
 	public void updateUser(User user) {
 		SqlSession sqlSession = SqlSessionFactoryManager.getSqlSessionFactory().openSession();

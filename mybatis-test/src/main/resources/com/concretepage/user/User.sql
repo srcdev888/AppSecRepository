@@ -6,8 +6,8 @@ CREATE TABLE users (
   last_name varchar(45) NOT NULL
 );
 INSERT INTO users(user_id, email_id, password, first_name, last_name)
-    VALUES('2', 'test@test.com', 'password', 'first', 'last');
+    VALUES('2', 'test2@test.com', 'password', 'test2', 'last');
     INSERT INTO users(user_id, email_id, password, first_name, last_name)
-    VALUES('4', 'test@test.com', 'password', 'first', 'last');
+    VALUES('4', 'test4@test.com', 'password', 'test4', 'last');
 INSERT INTO users(user_id, email_id, password, first_name, last_name)
-    VALUES('1000', 'test@test.com', 'password', 'first', 'last');
+    VALUES('1000', 'test1000@test.com', 'password', 'test1000', 'last');
