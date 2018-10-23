@@ -7,8 +7,9 @@ The purpose of this project is to share XML query via CxAudit using cxXPath APIs
 ## cxXPath
 cxXPath is available since 8.6.0 and is a wrapper of .NET’s XPath C# API. Note that malformed XML is not supported i.e., missing xml header.
 
-The example based on [books.xml](books.xml) illustrates
-* Retrieve 'book' nodes that contains author named "Corets, Eva"
+### Examples
+
+* Retrieve 'book' nodes in [books.xml](books.xml) that contains author named "Corets, Eva"
 
 ```csharp
 foreach (CxXmlDoc doc in cxXPath.GetXmlFiles("books.xml", true)) {
@@ -21,6 +22,46 @@ foreach (CxXmlDoc doc in cxXPath.GetXmlFiles("books.xml", true)) {
   foreach(XPathNavigator bookNode in nodeIterator) {
     result.Add(cxXPath.CreateXmlNode(bookNode, doc, 8, true));
   }
+}
+```
+
+* Check that encryption is enforced in session 'cookie-store' as declared via 'session-encrypters' is in [webx.xml](webx.xml) 
+
+```csharp
+try {
+
+	// Path declaration for <session-stores> node
+	string xPathStore = @"/beans:beans/services:request-contexts/" +
+		"request-contexts:session/stores/session-stores:cookie-store" +
+		"[count(.//session-encrypters:aes-encrypter)=0]" +
+		"";
+
+	foreach (CxXmlDoc doc in cxXPath.GetXmlFiles(@"webx.xml", true)) {
+
+		// XPath Navigator
+		XPathNavigator navigator = doc.CreateNavigator();  
+
+		// Register namespace
+		XmlNamespaceManager manager = new XmlNamespaceManager(navigator.NameTable);  
+		manager.AddNamespace("beans", "http://www.springframework.org/schema/beans");  
+		manager.AddNamespace("services", "http://www.alibaba.com/schema/services");
+		manager.AddNamespace("request-contexts", "http://www.alibaba.com/schema/services/request-contexts");
+		manager.AddNamespace("session-stores", "http://www.alibaba.com/schema/services/request-contexts/session/stores");
+		manager.AddNamespace("session-encoders", "http://www.alibaba.com/schema/services/request-contexts/session/encoders");
+		manager.AddNamespace("session-encrypters", "http://www.alibaba.com/schema/services/request-contexts/session/encrypters");
+
+		// Declaration of a navigator for <session-stores> node
+		XPathExpression storeQuery = navigator.Compile(xPathStore);
+		storeQuery.SetContext(manager);  
+		XPathNodeIterator storeIterator = navigator.Select(storeQuery);
+
+		foreach(XPathNavigator storeNode in storeIterator) {
+			result.Add(cxXPath.CreateXmlNode(storeNode, doc, 2, true));
+		}
+	}
+
+}catch(Exception e){
+	cxLog.WriteDebugMessage(e.Message);
 }
 ```
 
