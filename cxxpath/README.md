@@ -25,7 +25,7 @@ foreach (CxXmlDoc doc in cxXPath.GetXmlFiles("books.xml", true)) {
 }
 ```
 
-* Check that encryption is enforced in session 'cookie-store' as declared via 'session-encrypters' is in [webx.xml](webx.xml) 
+* Check that encryption is enforced in session 'cookie-store' as declared via 'session-encrypters' is in [webx.xml](webx.xml)
 
 ```csharp
 try {
@@ -33,8 +33,7 @@ try {
 	// Path declaration for <session-stores> node
 	string xPathStore = @"/beans:beans/services:request-contexts/" +
 		"request-contexts:session/stores/session-stores:cookie-store" +
-		"[count(.//session-encrypters:aes-encrypter)=0]" +
-		"";
+		"[count(.//session-encrypters:aes-encrypter)=0]";
 
 	foreach (CxXmlDoc doc in cxXPath.GetXmlFiles(@"webx.xml", true)) {
 
@@ -65,6 +64,43 @@ try {
 }
 ```
 
+* To resolve [pom.xml](pom.xml) which uses namespace with xPath , add the 'ns' namespace to the XmlNamespaceManager. Example shows returning result for 'junit' dependency discovered with version higher than 3.8
+
+```csharp
+
+// Path declaration to find 'junit' dependency version
+string xPathStore = "/ns:project/ns:dependencies/ns:dependency[ns:artifactId='junit']//ns:version";
+foreach (CxXmlDoc doc in cxXPath.GetXmlFiles(@"pom.xml", false)) {
+
+  // XPath Navigator
+  XPathNavigator navigator = doc.CreateNavigator();  
+
+  // Register namespace
+  XmlNamespaceManager manager = new XmlNamespaceManager(navigator.NameTable);  
+  manager.AddNamespace("ns", @"http://maven.apache.org/POM/4.0.0");  
+
+  // Declaration of a navigator for <version> node
+  XPathExpression storeQuery = navigator.Compile(xPathStore);
+  storeQuery.SetContext(manager);  
+  XPathNodeIterator storeIterator = navigator.Select(storeQuery);
+
+  foreach(XPathNavigator storeNode in storeIterator) {
+
+    char[] splitTokens = new char[] {'.', ','};
+    String[] strAsplit = storeNode.Value.Split(splitTokens, StringSplitOptions.RemoveEmptyEntries);
+    int[] versionA = new int[3];
+    for (int i = 0; i < 3; i++)
+    {
+      versionA[i] = Convert.ToInt32(strAsplit[i]);
+    }
+
+    if(versionA[0] < 4 ){
+      if(versionA[1] < 9)
+        result.Add(cxXPath.CreateXmlNode(storeNode, doc, 2, true));
+    }
+  }
+}
+```
 
 ### References
 How to navigate XML with the XPathNavigator class by using Visual C# [[1]]  
