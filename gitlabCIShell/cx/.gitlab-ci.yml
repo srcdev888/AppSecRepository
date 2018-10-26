@@ -1,0 +1,20 @@
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
+before_script:
+
+
+stages:
+  - test
+
+job1:
+  stage: test
+  script:
+    - cd
+    - call C:\Utilities\GitLab\Cx_GitLab_Windows_v2.bat -h 20 -m 500 -o -r
+   
+    
+  only:
+    - master
+  tags:
+    - windows

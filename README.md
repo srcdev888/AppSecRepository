@@ -14,4 +14,5 @@ Purpose:  Repository for my learnings
 
 ***
 # DevOps Integration
+* [GitLab CI Shell Runner with CxSAST](gitlabCIShell/README.md)
 * [AWS CodeCommit, CodeBuild, CodePipeline] (aws/README.md)
