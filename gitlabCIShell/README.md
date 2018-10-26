@@ -53,8 +53,8 @@ The purpose of this project is to share GitLab CI Shell Runner integration  with
 
 ***
 ## Known issues with GitLab Shell Runner
-- Character '!' is removed when script executing in GitLab Shell Runner, there is currently no workaround. See [GitLab Known Issue](https://gitlab.com/gitlab-org/gitlab-runner/issues/1864)
-- SSL certificate verification not working in version 10.6, a simple workaround is to add an environmental variable: "GIT_SSL_NO_VERIFY=true" to your runner's configuration.
+- [Character '!' is removed when script executing in GitLab Shell Runner](https://gitlab.com/gitlab-org/gitlab-runner/issues/1864), there is currently no workaround.  
+- [SSL certificate verification not working in version 10.6](https://gitlab.com/gitlab-org/gitlab-runner/issues/3180), a simple workaround is to add an environmental variable: "GIT_SSL_NO_VERIFY=true" to your runner's configuration.
 
 ```toml
 # config.toml
