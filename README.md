@@ -6,7 +6,9 @@ Purpose:  Repository for my learnings
 
 # Customized CxQL for Checkmarx CxSAST  
 * [Jackson/FasterXML: Command injection via deserialization](jackson/README.md)
-* [Example using CxxPath API](cxxpath/README.md)
+* [CxxPath API Example](cxxpath/README.md)
+* [Annotation attribute verification](annotation/README.md)
+* [Sanitizer](sanitizer/README.md)
 
 ***
 # Framework Example
