@@ -8,7 +8,7 @@ Purpose:  Repository for my learnings
 * [Jackson/FasterXML: Command injection via deserialization](jackson/README.md)
 * [CxxPath API Example](cxxpath/README.md)
 * [Annotation attribute verification](annotation/README.md)
-* [Inputs Sanitizer](sanitizer/README.md)
+* [Example on adding input sanitizers](sanitizer/README.md)
 
 ***
 # Framework Example

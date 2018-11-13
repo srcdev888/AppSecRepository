@@ -3,7 +3,7 @@
 * Updated:  02 Nov 2018
 
 This project showcases different sanitizers implementation and how it can be introduced into CxQL.
-* [Detect sanitizer used in method condition](#Detect-sanitizer-used-in-method condition)
+* [Detect sanitizer used in method condition](#Detect-sanitizer-used-in-method-condition)
 * [Paired hook sanitizers](#Paired-hook-sanitizers)
 
 ***
