@@ -11,7 +11,7 @@ Purpose:  Repository for my learnings
 * [Example on adding input sanitizers](sanitizer/README.md)
 
 ***
-# Framework Example
+# Vulnerable Framework Example
 * [MyBatis Framework Example](mybatis-test)
 
 ***

@@ -51,7 +51,7 @@ Paired hook sanitizers 'startSSRFNetHookCheckingWithExpirationCache', 'startSSRF
 ```java
 // CxQL
   /**
-  *  Update: pedric.kng@checkmarx.com 09-NOV-2018 - Detect no usage of Aliyun SSRFNetHook
+  *  Update: pedric.kng@checkmarx.com 09-NOV-2018 - Detect no usage of SSRFNetHook
   */
   CxList methods = Find_Methods();
   CxList allStatementCollection = Find_StatementCollection();
@@ -65,39 +65,35 @@ Paired hook sanitizers 'startSSRFNetHookCheckingWithExpirationCache', 'startSSRF
   CxList Sinks = methods.FindByMemberAccess("HttpClient.execute*");
   // Loop through sink
   foreach(CxList sink in Sinks){
+    // Find ancs of type TryCatchFinally Stmt
+    CxList Trys = sink.GetAncOfType(typeof(TryCatchFinallyStmt));
 
-	// Find ancs of type TryCatchFinally Stmt
-	CxList Trys = sink.GetAncOfType(typeof(TryCatchFinallyStmt));
-
-	// If sink must have anc of type 'TryCatchFinallyStmt'
-	if(Trys.Count > 0){
-		foreach(CxList tryCatch in Trys){
-			try{
-				TryCatchFinallyStmt tryGraph = tryCatch.TryGetCSharpGraph<TryCatchFinallyStmt>();
-        CxList TryBlocks = All.NewCxList();
-        CxList FinallyBlocks = All.NewCxList();
-        TryBlocks.Add(tryGraph.Try.NodeId, tryGraph.Try);
-        FinallyBlocks.Add(tryGraph.Finally.NodeId, tryGraph.Finally);
-
-        // Check for startSSRF
-        CxList startFound = startSSRF.GetByAncs(TryBlocks);
-        if(startFound.Count > 0){
-
-					// Check for stop SSRF
-					CxList stopFound = All.NewCxList();
-					stopFound.Add(stopSSRF.GetByAncs(TryBlocks));
-					stopFound.Add(stopSSRF.GetByAncs(FinallyBlocks));
-					if(stopFound.Count > 0){
-						requests -= sink;
-					}
-				}
-			}catch(Exception ex){
-				cxLog.WriteDebugMessage(ex);		
-			}
-		}
-
-	}
-}
+    // If sink must have anc of type 'TryCatchFinallyStmt'
+    if(Trys.Count > 0){
+      foreach(CxList tryCatch in Trys){
+        try{
+          TryCatchFinallyStmt tryGraph = tryCatch.TryGetCSharpGraph<TryCatchFinallyStmt>();
+          CxList TryBlocks = All.NewCxList();
+          CxList FinallyBlocks = All.NewCxList();
+          TryBlocks.Add(tryGraph.Try.NodeId, tryGraph.Try);
+          FinallyBlocks.Add(tryGraph.Finally.NodeId, tryGraph.Finally);
+          // Check for startSSRF
+          CxList startFound = startSSRF.GetByAncs(TryBlocks);
+          if(startFound.Count > 0){
+            // Check for stop SSRF
+            CxList stopFound = All.NewCxList();
+            stopFound.Add(stopSSRF.GetByAncs(TryBlocks));
+            stopFound.Add(stopSSRF.GetByAncs(FinallyBlocks));
+            if(stopFound.Count > 0){
+              requests -= sink;
+            }
+          }
+        }catch(Exception ex){
+          cxLog.WriteDebugMessage(ex);
+        }
+      }
+    }
+  }
 ```
 
 *
