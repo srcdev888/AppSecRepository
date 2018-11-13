@@ -8,7 +8,7 @@ Purpose:  Repository for my learnings
 * [Jackson/FasterXML: Command injection via deserialization](jackson/README.md)
 * [CxxPath API Example](cxxpath/README.md)
 * [Annotation attribute verification](annotation/README.md)
-* [Sanitizer](sanitizer/README.md)
+* [Inputs Sanitizer](sanitizer/README.md)
 
 ***
 # Framework Example
@@ -17,4 +17,4 @@ Purpose:  Repository for my learnings
 ***
 # DevOps Integration
 * [GitLab CI Shell Runner with CxSAST](gitlabCIShell/README.md)
-* [AWS CodeCommit, CodeBuild, CodePipeline] (aws/README.md)
+* [AWS CodeCommit, CodeBuild, CodePipeline](aws/README.md)
