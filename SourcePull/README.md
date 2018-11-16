@@ -17,8 +17,8 @@ This section highlights the thought process to achieve this scenario.
 
 ## References
 
-Pulling Git repository with Python [[1]]
+Pulling Git repository with Python [[1]]  
 CxConsole: CxSAST CLI [[2]]
 
-[1]:https://github.com/cx-demo/py_git "PYGIT"
+[1]:https://github.com/cx-demo/py_git "PYGIT"  
 [2]:https://checkmarx.atlassian.net/wiki/spaces/KC/pages/52560015/CxConsole+CxSAST+CLI "CxConsole: CxSAST CLI"
