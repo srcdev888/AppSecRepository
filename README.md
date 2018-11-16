@@ -18,4 +18,4 @@ Purpose:  This repository contains many references and tutorials to upkeep my le
 # DevOps Integration
 * [GitLab CI Shell Runner with CxSAST](gitlabCIShell/README.md)
 * [CxSAST SAST/OSA scans with Source Pulling](SourcePull/README.md)
-* [AWS CodeCommit, CodeBuild, CodePipeline **IN-WORKS**](aws/README.md)
+<!-- [AWS CodeCommit, CodeBuild, CodePipeline **IN-WORKS**](aws/README.md) -->
