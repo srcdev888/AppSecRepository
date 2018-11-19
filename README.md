@@ -1,7 +1,9 @@
-# My AppSec Repository
+# My AppSec Journal
+
 Author:   Pedric Kng
 
-Purpose:  This repository contains many references and tutorials to upkeep my learnings in Checkmarx
+Purpose:  This repository documents my learning for Application Security: Checkmarx Product Knowledge and DevSecOps
+
 ***
 
 # Customized CxQL for Checkmarx CxSAST  
@@ -18,4 +20,4 @@ Purpose:  This repository contains many references and tutorials to upkeep my le
 # DevOps Integration
 * [GitLab CI Shell Runner with CxSAST](gitlabCIShell/README.md)
 * [CxSAST SAST/OSA scans with Source Pulling](SourcePull/README.md)
-<!-- [AWS CodeCommit, CodeBuild, CodePipeline **IN-WORKS**](aws/README.md) -->
+* [AWS CodeCommit, CodeBuild, CodePipeline](aws/README.md)

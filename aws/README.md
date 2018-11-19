@@ -1,58 +1,42 @@
-# AWS Integration with Checkmarx CxSAST  
+# Checkmarx CxSAST integration with AWS Integration
 * Author:   Pedric Kng  
-* Updated:  26 Sept 2018
+* Updated:  17 Nov 2018
 
-Sharing on integration of Checkmarx CxSAST and CxOSA with AWS CodeCommit and CodePipeline.
+AWS offers many different CI/CD platform;
+* **CodeCommit** - GIT Repository equivalent to Github
+* **CodeBuild** - Continuous integration service for build and test
+* **AWS CodeDeploy** - Continuous deployment service into AWS instances
+* **CodePipeline** - Continuous integration and delivery service; note that it integrates with various AWS solutions; CodeCommit (Source Stage), Codebuild (Build Stage), CodeDeploy (Deploy Stage).
+* **CodeStar** - CodeStar provides a wizard based project type selection to kickstart your application development
+* **AWS CloudFormation** - Model and provision all your cloud infrastructure resources; infrastructure-as-code
 
-## AWS Technologies
-* AWS CodeCommit - GIT Repository equivalent to Github
-* AWS CodePipeline
-* AWS CodeBuild
-* AWS CodeDeploy
-* AWS CloudFormation
+There are several ways to integrate CxSAST with a variety of Amazon CI environments, namely;
+- Checkmarx CxSAST can pull source code from Amazon [CodeCommit](#CodeCommit) out-of-the-box for SAST scan
+- Checkmarx CxSAST scan be invoked from Amazon [CodeBuild](#CodeBuild) as part of the pre-build phase
+- Checkmarx CxSAST can be invoked in CodePipeline as part of [CodeBuild](#CodeBuild) or [through a Custom Action](#CodePipeline)
 
-***
+Regardless of integration, all scan results are centralized in Checkmarx CxSAST.
 
-## Troubleshooting
+# CxSAST Integrations
 
-### Connecting to AWS CodeCommit using username and Password
-Refer to [[5]]
+## CodeCommit
+CxSAST support out-of-the box pulling source code from Git repository, this is usually practiced in a Security Gate model; whereby testing is executed in the last phase of development and no build servers is deployed.
 
-### Connecting to AWS CodeCommit using aws cli credentials helper (not working)
-1. Validate that you have followed [[1]] to setup the AWS Command; note that Python 3.6 and pip is required.
-2. Setup a 'CodeCommitProfile' profile in "%user_profile%\\.aws\\credentials"
+Currently, AWS CodeCommit supports both HTTPS(username + password) and SSH mechanism to interact with the CodeCommit repository [[2]]. Both mechanisms are supported with Checkmarx CxSAST [[1]].
 
-```yaml
-[default]
+Note that managing credentials in GIT client via AWS CLI Credential Helper( through an Access Key ID and Secret Access Key) is not supported by CxSAST.
 
-[CodeCommitProfile]
-aws_access_key_id = *AWS ACCESS KEY*
-aws_secret_access_key = *AWS SECRET ACCESS KEY*
-```
-3. Configure additional credential in "%user_profile%\\.gitconfig" for AWS CodeCommit, give the credential a particular domain setting. This can prevent it from overriding other GIT credential e.g., Windows Credential for GitHub.
+## CodeBuild
+[Invoking CxSAST from AWS CodeBuild](codebuild/README.md)  
 
-```yaml
-[gui]
-[user]
-	email = abc@gmail.com
-	name = abc
-[credential]
-    helper = wincred
-[credential "https://git-codecommit.*.amazonaws.com"]
-	helper = !aws --profile CodeCommitProfile codecommit credential-helper $@
-	UseHttpPath = true
-```
-Referenced from blog [[4]]
+## CodePipeline
+There are two means to integrate CxSAST with AWS CodePipeline, namely;
+- As part of CodeBuild, refer to [CodeBuild Integration](#Codebuild)  
+- [Invoking CxSAST as a custom action](CodePipeline/README.md)
 
 ## References
-Install the AWS Command Line Interface on Microsoft Windows [[1]]  
-AWS CLI Name Profile Configuration [[2]]  
-Git with AWS CodeCommit Tutorial [[3]]  
-Using CodeCommit and Github credentials [[4]]
-Introducing Git Credentials: A Simple Way to Connect to AWS CodeCommit Repositories Using a Static User Name and Password [[5]]
+Configuring the Connection to a Source Control System on CxSAST [[1]]  
+Git with AWS CodeCommit Tutorial [[2]]  
 
-[1]:https://docs.aws.amazon.com/cli/latest/userguide/awscli-install-windows.html#awscli-install-windows-path "Install the AWS Command Line Interface on Microsoft Windows"
-[2]:https://docs.aws.amazon.com/cli/latest/userguide/cli-multiple-profiles.html "AWS CLI Name Profile Configuration"
-[3]:https://docs.aws.amazon.com/codecommit/latest/userguide/getting-started.html#getting-started-create-repo "Git with AWS CodeCommit Tutorial"
-[4]:https://jameswing.net/aws/using-codecommit-and-git-credentials.html "Using CodeCommit and Github credentials"
-[5]:https://aws.amazon.com/blogs/devops/introducing-git-credentials-a-simple-way-to-connect-to-aws-codecommit-repositories-using-a-static-user-name-and-password/ "Introducing Git Credentials: A Simple Way to Connect to AWS CodeCommit Repositories Using a Static User Name and Password"
+[1]:https://checkmarx.atlassian.net/wiki/spaces/KC/pages/324927625/Configuring+the+Connection+to+a+Source+Control+System+v8.6.0+and+up "Configuring the Connection to a Source Control System"
+[2]:https://docs.aws.amazon.com/codecommit/latest/userguide/getting-started.html#getting-started-create-repo "Git with AWS CodeCommit Tutorial"
