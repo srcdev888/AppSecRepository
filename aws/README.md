@@ -31,8 +31,8 @@ Note that managing credentials in GIT client via AWS CLI Credential Helper( thro
 
 ## CodePipeline
 There are two means to integrate CxSAST with AWS CodePipeline, namely;
-- As part of CodeBuild, refer to [CodeBuild Integration](#Codebuild)  
-- [Invoking CxSAST as a custom action](CodePipeline/README.md)
+- As part of CodeBuild, refer to [CodeBuild Integration](codebuild/README.md)  
+- [Invoking CxSAST as a custom action](codepipeline/README.md)
 
 ## References
 Configuring the Connection to a Source Control System on CxSAST [[1]]  
