@@ -14,7 +14,7 @@ For discussion sake, this tutorial will be only cover Asynchronous CxSAST Scan; 
 
 **Step1** : Create the CodeBuild project using the console wizard  
 
-![Create the build project](assets/CodeBuild-createBuildProj01.png)
+![Create the build project](assets/CodeBuild-createBuildProj001.png)
 
 **Step2** : Setup the build as required
 ![Configure the CodeBuild project](assets/CodeBuild-createBuildProj02.png)
