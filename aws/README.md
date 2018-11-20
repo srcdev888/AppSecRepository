@@ -17,6 +17,8 @@ There are several ways to integrate CxSAST with a variety of Amazon CI environme
 
 Regardless of integration, all scan results are centralized in Checkmarx CxSAST.
 
+***
+
 # CxSAST Integrations
 
 ## CodeCommit
@@ -24,7 +26,7 @@ CxSAST support out-of-the box pulling source code from Git repository, this is u
 
 Currently, AWS CodeCommit supports both HTTPS(username + password) and SSH mechanism to interact with the CodeCommit repository [[2]]. Both mechanisms are supported with Checkmarx CxSAST [[1]].
 
-Note that managing credentials in GIT client via AWS CLI Credential Helper( through an Access Key ID and Secret Access Key) is not supported by CxSAST.
+Note that managing credentials in GIT client via AWS CLI Credential Helper(through an Access Key ID and Secret Access Key) is not supported by CxSAST.
 
 ## CodeBuild
 [Invoking CxSAST from AWS CodeBuild](codebuild/README.md)  
@@ -34,9 +36,93 @@ There are two means to integrate CxSAST with AWS CodePipeline, namely;
 - As part of CodeBuild, refer to [CodeBuild Integration](codebuild/README.md)  
 - [Invoking CxSAST as a custom action](codepipeline/README.md)
 
+***
+
+# AWS CLI Cheat sheet
+For AWS CLI installation, refer to [[4]]
+
+## Create login profiles
+```Batchfile
+> aws configure [--profile profile-name]
+```
+In addition, you can alter the entries in the AWS CLI files;  
+
+- %user_profile%\\.aws\\credentials
+
+```ini
+[default]
+aws_access_key_id = *AWS ACCESS KEY*
+aws_secret_access_key = *AWS SECRET ACCESS KEY*
+
+[CodeCommitProfile]
+aws_access_key_id = *AWS ACCESS KEY*
+aws_secret_access_key = *AWS SECRET ACCESS KEY*
+```
+- %user_profile%\\.aws\\config
+
+```ini
+[default]
+output = json
+region = us-east-1
+
+[profile CodeCommitProfile]
+region = ap-southeast-1
+output = json
+```
+
+Refer to [[5]] for more details
+
+## List configuration
+```Batchfile
+> aws configure list [--profile profile-name]
+```
+
+## List AMI images
+```Batchfile
+> aws ec2 describe-images --filters "Name=tag:Name,Values=<AMI Name>" [--profile profile-name]
+```
+
 ## References
 Configuring the Connection to a Source Control System on CxSAST [[1]]  
 Git with AWS CodeCommit Tutorial [[2]]  
+Introducing Git Credentials: A Simple Way to Connect to AWS CodeCommit Repositories Using a Static User Name and Password [[3]]
+Install the AWS Command Line Interface on Microsoft Windows [[4]]  
+AWS CLI Name Profile Configuration [[5]]  
+AWS CLI Command Reference [[6]]
 
 [1]:https://checkmarx.atlassian.net/wiki/spaces/KC/pages/324927625/Configuring+the+Connection+to+a+Source+Control+System+v8.6.0+and+up "Configuring the Connection to a Source Control System"
 [2]:https://docs.aws.amazon.com/codecommit/latest/userguide/getting-started.html#getting-started-create-repo "Git with AWS CodeCommit Tutorial"
+[3]:https://aws.amazon.com/blogs/devops/introducing-git-credentials-a-simple-way-to-connect-to-aws-codecommit-repositories-using-a-static-user-name-and-password/ "Introducing Git Credentials: A Simple Way to Connect to AWS CodeCommit Repositories Using a Static User Name and Password"
+[4]:https://docs.aws.amazon.com/cli/latest/userguide/awscli-install-windows.html#awscli-install-windows-path "Install the AWS Command Line Interface on Microsoft Windows"
+[5]:https://docs.aws.amazon.com/cli/latest/userguide/cli-multiple-profiles.html "AWS CLI Name Profile Configuration"
+[6]:https://docs.aws.amazon.com/cli/latest/index.html "AWS CLI Command Reference"
+
+<!--
+### Connecting to AWS CodeCommit using aws cli credentials helper (not working)
+1. Validate that you have followed [[1]] to setup the AWS Command; note that Python 3.6 and pip is required.
+2. Setup a 'CodeCommitProfile' profile in "%user_profile%\\.aws\\credentials"
+
+```yaml
+[default]
+
+[CodeCommitProfile]
+aws_access_key_id = *AWS ACCESS KEY*
+aws_secret_access_key = *AWS SECRET ACCESS KEY*
+```
+3. Configure additional credential in "%user_profile%\\.gitconfig" for AWS CodeCommit, give the credential a particular domain setting. This can prevent it from overriding other GIT credential e.g., Windows Credential for GitHub.
+
+```yaml
+[gui]
+[user]
+	email = abc@gmail.com
+	name = abc
+[credential]
+    helper = wincred
+[credential "https://git-codecommit.*.amazonaws.com"]
+	helper = !aws --profile CodeCommitProfile codecommit credential-helper $@
+	UseHttpPath = true
+```
+Using CodeCommit and Github credentials [[4]]
+
+[4]:https://jameswing.net/aws/using-codecommit-and-git-credentials.html "Using CodeCommit and Github credentials"
+-->
