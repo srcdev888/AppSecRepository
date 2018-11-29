@@ -3,25 +3,91 @@
 * Updated:  29 Nov 2018
 
 ## Basic Exercises
-* [SQL Injection](#SQL-Injection)
+* [Quick elimination of SQL Injection using CxAudit UI](#SQL-Injection)
+* [Finding sources and sinks](#Finding-sources-and-sinks)
+* [Building flows](#Building-flows)
+* [Adding proprietary sanitizers](#Adding-proprietary-sanitizers)
 
 ## Advanced Exercises
-* [Filter based on iteration statement conditions](#Filer-based on-iteration-statement-conditions)
+* [Filter based on iteration statement conditions](#Filter-based-on-iteration-statement-conditions)
 
 ***
 ## Basic Exercises
 ### SQL Injection
-This exercise demostrates 4 scenarios using CxAudit UI features e.g., add to sanitizers;
+This exercise illustrates 4 scenarios using CxAudit quick add functionality;
 1. Parameters not sanitized leading to a SQL injection
 2. Parameters are sanitized using prepared statements
 3. Sanitization method not recognized not CxSAST; add to sanitizers
-4. Interactive input not detected; add to inputs
+4. Interactive input not detected; add to interactive inputs
 
-###
+### Finding sources and sinks
+This exercise consists of 3 parts based on [1.cs](basic/Exercise 1/1.cs);
+1. Find all nodes whose name is "input" (not case sensitive)
+```csharp
+CxList nodesNamedInput = All.FindByName("*input", false);
+result = nodesNamedInput;
+```
+
+2. Find all methods whose name is "input" (not case sensitive)
+```csharp
+CxList methodNamedInput = All.FindByName("*input", false).FindByType(typeof(MethodDecl));
+result = methodNamedInput;
+```
+
+3. Find all nodes whose name is "input" (not case sensitive) under an "if" statement
+```csharp
+CxList blocks = All.GetBlocksOfIfStatements(true);
+result = nodesNamedInput.GetByAncs(blocks);
+```
+
+### Building flows
+This exercise consists of 2 parts based on [2.cs](basic/Exercise 2/2.cs);
+
+1. Build Flow from input to sink, where:
+	* input is method "GetSpeed" invocation
+	* sink is parameter invocation of Car.Drive
+
+  ```csharp
+CxList input = All.FindByShortName("GetSpeed").FindByType(typeof(MethodInvokeExpr));
+CxList memberAccess = All.FindByMemberAccess("Car.Drive");
+CxList sink1 = All.GetParameters(memberAccess);
+result = input.DataInfluencingOn(sink1); //GetSpeed
+  ```
+
+2. Input is similar to previous exercise, but the sink is the parameter of method declaration "Drive" that overrides Car.Drive
+```csharp
+CxList methodDecl = All.FindDefinition(memberAccess);
+CxList sink2 = All.GetParameters(methodDecl);
+result = input.DataInfluencingOn(sink2); //GetSpeed
+```
+
+### Adding proprietary sanitizers
+This exercise consists of 2 parts based on [3.cs](basic/Exercise 3/3.cs);
+1. Find flow from the input to the sink.
+ * The input is the method 'GetName()'
+ * The sink is the first parameter of Database.execute
+
+ ```csharp
+CxList input = All.FindByShortName("GetName");
+CxList sink = All.GetParameters(All.FindByMemberAccess("Database.execute"), 0);
+result = input.InfluencingOn(sink);
+```
+
+2. Similar to exercise 3.1, with the following addition:
+	* Function 'CheckIfValid' sanitizes the input.
+
+ ```csharp
+CxList input = All.FindByShortName("GetName");
+CxList sink = All.GetParameters(All.FindByMemberAccess("Database.execute"), 0);
+CxList validator = All.NewCxList();
+CxList checkIfValid = Find_Methods().FindByShortName("CheckIfValid");
+validator.Add(All.GetSanitizerByMethodInCondition(checkIfValid));
+result = input.InfluencingOnAndNotSanitized(sink, validator);
+```
 
 ***
 ## Advanced Exercises
-### Filer based on iteration statement conditions
+### Filter based on iteration statement conditions
 Query: Look for flow from source to sink,
 - Source:  creation of Mary object
 - Sink:   writeln invoke expression
