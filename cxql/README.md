@@ -62,7 +62,7 @@ result = input.DataInfluencingOn(sink2); //GetSpeed
 ```
 
 ### Adding proprietary sanitizers
-This exercise consists of 2 parts based on [3.cs](basic/Exercise-3/3.cs);
+This exercise consists of 3 parts based on [3.cs](basic/Exercise-3/3.cs);
 1. Find flow from the input to the sink.
  * The input is the method 'GetName()'
  * The sink is the first parameter of Database.execute
@@ -72,8 +72,15 @@ CxList input = All.FindByShortName("GetName");
 CxList sink = All.GetParameters(All.FindByMemberAccess("Database.execute"), 0);
 result = input.InfluencingOn(sink);
 ```
+2. Continuing the earlier exercise, check that Function 'encode' sanitizes the input.
+```csharp
+CxList input = All.FindByShortName("GetName");
+CxList sink = All.GetParameters(All.FindByMemberAccess("Database.execute"), 0);
+CxList sanitizer = Find_Methods().FindByShortName("encode");
+result = input.InfluencingOnAndNotSanitized(sink, sanitizer);
+```
 
-2. Similar to exercise 3.1, with the following addition:
+3. Continuing the previous exercise, with the following addition:
 	* Function 'CheckIfValid' sanitizes the input.
 
  ```csharp
