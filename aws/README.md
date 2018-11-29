@@ -82,6 +82,16 @@ Refer to [[5]] for more details
 > aws ec2 describe-images --filters "Name=tag:Name,Values=<AMI Name>" [--profile profile-name]
 ```
 
+## Create Instance
+```Batchfile
+> aws ec2 run-instances --region us-east-1 --image-id <Replace with AMI ID>  --count 1 --instance-type r5.xlarge --security-group-ids sg-08ca8e460f086caa9 --subnet-id subnet-03221d4d303e3893d --associate-public-ip-address --tag-specifications "ResourceType=instance,Tags=[{Key=owner,Value=<Replace with UserName>}]" "ResourceType=volume,Tags=[{Key=owner,Value=<Replace with UserName>}]"
+```
+
+## List Instance
+```Batchfile
+> aws aws ec2 describe-instances --filters "Name=tag:owner,Values=<Replace with UserName>" [--profile profile-name]
+```
+
 ## References
 Configuring the Connection to a Source Control System on CxSAST [[1]]  
 Git with AWS CodeCommit Tutorial [[2]]  

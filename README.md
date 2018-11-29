@@ -11,6 +11,7 @@ Purpose:  This repository documents my learning for Application Security: Checkm
 * [CxxPath API Example](cxxpath/README.md)
 * [Annotation attribute verification](annotation/README.md)
 * [Example on adding input sanitizers](sanitizer/README.md)
+* [Miscellaneous CxQL Exercises](cxql/README.md)
 
 ***
 # Vulnerable Framework Example

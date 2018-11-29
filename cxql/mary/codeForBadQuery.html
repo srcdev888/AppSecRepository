@@ -1,0 +1,14 @@
+<html>
+	<script src="b.js"></script>	
+	<script>
+		function Mary(){ this.run=function(){alert("running")}};
+		function Person(){this.run=function(){alert("lazy")}};
+		Mary.prototype = new Person();
+		var m=null;
+		m = new Mary();
+		var  v=m;
+		var b= new B();
+		b.bar(v);		
+	</script>	
+</html>
+	
