@@ -3,12 +3,24 @@
 * Updated:  29 Nov 2018
 
 ## Basic Exercises
+* [SQL Injection](#SQL-Injection)
 
 ## Advanced Exercises
 * [Filter based on iteration statement conditions](#Filer-based on-iteration-statement-conditions)
 
 ***
+## Basic Exercises
+### SQL Injection
+This exercise demostrates 4 scenarios using CxAudit UI features e.g., add to sanitizers;
+1. Parameters not sanitized leading to a SQL injection
+2. Parameters are sanitized using prepared statements
+3. Sanitization method not recognized not CxSAST; add to sanitizers
+4. Interactive input not detected; add to inputs
 
+###
+
+***
+## Advanced Exercises
 ### Filer based on iteration statement conditions
 Query: Look for flow from source to sink,
 - Source:  creation of Mary object
