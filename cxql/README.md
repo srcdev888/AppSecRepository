@@ -14,14 +14,14 @@
 ***
 ## Basic Exercises
 ### SQL Injection
-This exercise illustrates 4 scenarios using CxAudit quick add functionality;
+This exercise [AccountDao.cs](SQLi/AccountDao.cs) illustrates 4 scenarios using CxAudit quick add functionality;
 1. Parameters not sanitized leading to a SQL injection
 2. Parameters are sanitized using prepared statements
 3. Sanitization method not recognized not CxSAST; add to sanitizers
 4. Interactive input not detected; add to interactive inputs
 
 ### Finding sources and sinks
-This exercise consists of 3 parts based on [1.cs](basic/Exercise 1/1.cs);
+This exercise consists of 3 parts based on [1.cs](basic/Exercise-1/1.cs);
 1. Find all nodes whose name is "input" (not case sensitive)
 ```csharp
 CxList nodesNamedInput = All.FindByName("*input", false);
@@ -41,7 +41,7 @@ result = nodesNamedInput.GetByAncs(blocks);
 ```
 
 ### Building flows
-This exercise consists of 2 parts based on [2.cs](basic/Exercise 2/2.cs);
+This exercise consists of 2 parts based on [2.cs](basic/Exercise-2/2.cs);
 
 1. Build Flow from input to sink, where:
 	* input is method "GetSpeed" invocation
@@ -62,7 +62,7 @@ result = input.DataInfluencingOn(sink2); //GetSpeed
 ```
 
 ### Adding proprietary sanitizers
-This exercise consists of 2 parts based on [3.cs](basic/Exercise 3/3.cs);
+This exercise consists of 2 parts based on [3.cs](basic/Exercise-3/3.cs);
 1. Find flow from the input to the sink.
  * The input is the method 'GetName()'
  * The sink is the first parameter of Database.execute
