@@ -3,7 +3,7 @@
 * Updated:  29 Nov 2018
 
 ## Basic Exercises
-* [Quick elimination of SQL Injection using CxAudit UI](#SQL-Injection)
+* [Quick elimination of SQL Injection using CxAudit UI](#Quick-elimination-of-SQL-Injection-using-CxAudit-UI)
 * [Finding sources and sinks](#Finding-sources-and-sinks)
 * [Building flows](#Building-flows)
 * [Adding proprietary sanitizers](#Adding-proprietary-sanitizers)
@@ -13,7 +13,7 @@
 
 ***
 ## Basic Exercises
-### SQL Injection
+### Quick elimination of SQL Injection using CxAudit UI
 This exercise [AccountDao.cs](SQLi/AccountDao.cs) illustrates 4 scenarios using CxAudit quick add functionality;
 1. Parameters not sanitized leading to a SQL injection
 2. Parameters are sanitized using prepared statements
@@ -87,6 +87,8 @@ result = input.InfluencingOnAndNotSanitized(sink, sanitizer);
 CxList input = All.FindByShortName("GetName");
 CxList sink = All.GetParameters(All.FindByMemberAccess("Database.execute"), 0);
 CxList validator = All.NewCxList();
+CxList sanitizer = Find_Methods().FindByShortName("encode");
+validator.Add(sanitizer);
 CxList checkIfValid = Find_Methods().FindByShortName("CheckIfValid");
 validator.Add(All.GetSanitizerByMethodInCondition(checkIfValid));
 result = input.InfluencingOnAndNotSanitized(sink, validator);
