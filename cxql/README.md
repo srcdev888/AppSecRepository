@@ -64,8 +64,8 @@ result = input.DataInfluencingOn(sink2); //GetSpeed
 ### Adding proprietary sanitizers
 This exercise consists of 3 parts based on [3.cs](basic/Exercise-3/3.cs);
 1. Find flow from the input to the sink.
- * The input is the method 'GetName()'
- * The sink is the first parameter of Database.execute
+	* The input is the method 'GetName()'
+	* The sink is the first parameter of Database.execute
 
  ```csharp
 CxList input = All.FindByShortName("GetName");
