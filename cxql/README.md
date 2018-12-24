@@ -10,6 +10,8 @@
 
 ## Advanced Exercises
 * [Filter based on iteration statement conditions](#Filter-based-on-iteration-statement-conditions)
+* [Sanitize path by node](#Sanitize-path-by-node)
+
 
 ***
 ## Basic Exercises
@@ -164,4 +166,15 @@ foreach(CxList l2 in tempResult.GetCxListByPath())
 	}
 
 }
+```
+
+### Sanitize path by node
+This exercise illustrates an example of extending a SSRF query to sanitize by a specific node 'addParameter'.
+The sample code is located in [TestSSRFController.java](TestSSRFController.java)
+
+```csharp
+result = base.SSRF();
+
+CxList sanitizeNodes = All.FindByMemberAccess("URIBuilder.addParameter");
+result = result.SanitizeCxList(sanitizeNodes);
 ```

@@ -16,6 +16,7 @@ Purpose:  This repository documents my learning for Application Security: Checkm
 ***
 # Vulnerable Framework Example
 * [MyBatis Framework Example](mybatis-test)
+<!--* [Spring MVC Framework](spring-mvc)-->
 
 ***
 # DevOps Integration

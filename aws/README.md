@@ -95,10 +95,10 @@ Refer to [[5]] for more details
 ## References
 Configuring the Connection to a Source Control System on CxSAST [[1]]  
 Git with AWS CodeCommit Tutorial [[2]]  
-Introducing Git Credentials: A Simple Way to Connect to AWS CodeCommit Repositories Using a Static User Name and Password [[3]]
+Introducing Git Credentials: A Simple Way to Connect to AWS CodeCommit Repositories Using a Static User Name and Password [[3]]  
 Install the AWS Command Line Interface on Microsoft Windows [[4]]  
 AWS CLI Name Profile Configuration [[5]]  
-AWS CLI Command Reference [[6]]
+AWS CLI Command Reference [[6]]  
 
 [1]:https://checkmarx.atlassian.net/wiki/spaces/KC/pages/324927625/Configuring+the+Connection+to+a+Source+Control+System+v8.6.0+and+up "Configuring the Connection to a Source Control System"
 [2]:https://docs.aws.amazon.com/codecommit/latest/userguide/getting-started.html#getting-started-create-repo "Git with AWS CodeCommit Tutorial"

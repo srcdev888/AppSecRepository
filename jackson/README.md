@@ -1,15 +1,9 @@
-# Customized CxQL for Checkmarx CxSAST  
+# Jackson/FasterXML: Command injection via deserialization
 * Author:   Pedric Kng  
 * Updated:  09 July 2018
 ***
 
-# Listing
-* [Jackson/FasterXML: Command injection via deserialization](#jacksonfasterxml-command-injection-via-deserialization)  
-
-***
-## Jackson/FasterXML: Command injection via deserialization
-
-### Vulnerability
+## Vulnerability
 CWE 502: Command injection via deserialization
 
 Best practices for FasterXML/Jackson usage
@@ -41,10 +35,12 @@ ObjectMapper om = new ObjectMapper();
 Serializable o = om.readValue(json, List.class);
 ```
 
-### Query
+## Query
 Extend 'Java/Cx/Java_General/Find_Unsafe_Deserializers'
+See [cxql example](cx\[Java][Corp][Java_General][FindUnsafe_Deserializers].cxql)
 
-### References
+
+## References
 Jackson Polymorphic Deserialization [[1]]  
 Blog on Jackson usage best practices [[2]]  
 Jackson deserialization exploit [[3]]  
