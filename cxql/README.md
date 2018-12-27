@@ -11,7 +11,7 @@
 ## Advanced Exercises
 * [Filter based on iteration statement conditions](#Filter-based-on-iteration-statement-conditions)
 * [Sanitize path by node](#Sanitize-path-by-node)
-
+* [Find String array](#Find-string-array)
 
 ***
 ## Basic Exercises
@@ -177,4 +177,47 @@ result = base.SSRF();
 
 CxList sanitizeNodes = All.FindByMemberAccess("URIBuilder.addParameter");
 result = result.SanitizeCxList(sanitizeNodes);
+```
+
+### Find String array
+This exercise seeks to find variable declarator of Java String array type.
+
+```java
+	String notAnArray;
+	String[] isAnArray;
+```
+
+The below CxQL uses the unique property 'Checkmarx.Dom.RankSpecifierCollection' to identify the array.
+
+```csharp
+// Find all declarators
+CxList allDeclarators = All.FindByType(typeof(Declarator));
+
+// Find all generic type refs
+CxList genericTypeRefs = All.FindByType(typeof(GenericTypeRef));
+
+// Transverse all the declarators
+CxList mylist = All.NewCxList();
+foreach(CxList declarator in allDeclarators){
+
+	// Find variable decl stmt
+	CxList tmp = declarator.GetAncOfType(typeof(VariableDeclStmt));
+
+	// Find type reference of 'string', remove the genericTypeRefs
+	CxList typeRef = All.GetByAncs(tmp).FindByType(typeof(TypeRef)).FindByShortName("string");
+	typeRef -= genericTypeRefs;
+
+	if(typeRef != null){
+		cxLog.WriteDebugMessage("found string");
+
+		TypeRef type = typeRef.TryGetCSharpGraph<TypeRef>();
+		if(type != null){
+			Checkmarx.Dom.RankSpecifierCollection ranks = type.ArrayRanks;
+			if(ranks.Count != 0){
+				mylist.Add(typeRef);
+			}
+		}
+	}
+}
+result = mylist;
 ```
