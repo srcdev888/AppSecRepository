@@ -2,6 +2,8 @@
 * Author:   Pedric Kng  
 * Updated:  29 Nov 2018
 
+The exercises highlighted here are for the sake of capability demonstration and can be rewritten or further refined for optimization e.g., using atomic queries.
+
 ## Basic Exercises
 * [Quick elimination of SQL Injection using CxAudit UI](#Quick-elimination-of-SQL-Injection-using-CxAudit-UI)
 * [Finding sources and sinks](#Finding-sources-and-sinks)
@@ -235,4 +237,10 @@ foreach(CxList declarator in allDeclarators){
 
 }
 result = myResultList;
+```
+
+Note that the above query will also return result for the below Java codes, further filtering can be done through CSharpGraph
+```Java
+Map response3 = new HashMap<String, String[]>();
+Map<String, String[]> response2 = new HashMap<>();
 ```
