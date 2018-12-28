@@ -183,11 +183,27 @@ result = result.SanitizeCxList(sanitizeNodes);
 This exercise seeks to find variable declarator of Java String array type.
 
 ```java
-	String notAnArray;
-	String[] isAnArray;
+// Scenario 1: Not a String Array
+String notAnArray;
+
+// Scenario 2: Array is declared with the name
+String isAnArray[];
+
+// Scenario 3:Array is declared with the type
+String[] isAnArray;
 ```
 
-The below CxQL uses the unique property 'Checkmarx.Dom.RankSpecifierCollection' to identify the array.
+The below CxQL adopts the following approach;
+```
+FOR EACH 'Declarator'
+	find the corresponding 'VariableDeclStmt'
+	find the 'RankSpecifier' under the 'VariableDeclStmt'  
+	find the 'TypeRef' of String Type under the 'VariableDeclStmt'  
+	IF of string type AND contains 'RankSpecifier' THEN
+	 	add to result
+	END IF  
+END FOR
+```
 
 ```csharp
 // Find all declarators
@@ -201,22 +217,22 @@ CxList myResultList = All.NewCxList();
 foreach(CxList declarator in allDeclarators){
 
 	// Find variable decl stmt
-	CxList tmp = declarator.GetAncOfType(typeof(VariableDeclStmt));
+	CxList varDeclStmt = declarator.GetAncOfType(typeof(VariableDeclStmt));
+
+	// Find children of variable decl stmt
+	CxList varChildren = All.GetByAncs(varDeclStmt);
+
+	// Find array rankSpecifier [] related to variable declaration
+	CxList rankSpecifier = varChildren.FindByType(typeof(RankSpecifier));
 
 	// Find type reference of 'string', remove the genericTypeRefs
-	CxList typeRef = All.GetByAncs(tmp).FindByType(typeof(TypeRef)).FindByShortName("string");
+	CxList typeRef = varChildren.FindByType(typeof(TypeRef)).FindByShortName("string");
 	typeRef -= genericTypeRefs;
 
-	if(typeRef != null){
-
-		TypeRef type = typeRef.TryGetCSharpGraph<TypeRef>();
-		if(type != null){
-			Checkmarx.Dom.RankSpecifierCollection ranks = type.ArrayRanks;
-			if(ranks.Count != 0){
-				myResultList.Add(declarator);
-			}
-		}
+	if(typeRef != null && rankSpecifier.Count != 0){
+		myResultList.Add(declarator);
 	}
+
 }
 result = myResultList;
 ```
