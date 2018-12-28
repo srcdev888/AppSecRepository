@@ -11,7 +11,7 @@
 ## Advanced Exercises
 * [Filter based on iteration statement conditions](#Filter-based-on-iteration-statement-conditions)
 * [Sanitize path by node](#Sanitize-path-by-node)
-* [Find String array](#Find-string-array)
+* [Find Declarator of String Array Type](#Find-Declarator-of-String-Array-Type)
 
 ***
 ## Basic Exercises
@@ -179,7 +179,7 @@ CxList sanitizeNodes = All.FindByMemberAccess("URIBuilder.addParameter");
 result = result.SanitizeCxList(sanitizeNodes);
 ```
 
-### Find String array
+### Find Declarator of String Array Type
 This exercise seeks to find variable declarator of Java String array type.
 
 ```java
@@ -197,7 +197,7 @@ CxList allDeclarators = All.FindByType(typeof(Declarator));
 CxList genericTypeRefs = All.FindByType(typeof(GenericTypeRef));
 
 // Transverse all the declarators
-CxList mylist = All.NewCxList();
+CxList myResultList = All.NewCxList();
 foreach(CxList declarator in allDeclarators){
 
 	// Find variable decl stmt
@@ -208,16 +208,15 @@ foreach(CxList declarator in allDeclarators){
 	typeRef -= genericTypeRefs;
 
 	if(typeRef != null){
-		cxLog.WriteDebugMessage("found string");
 
 		TypeRef type = typeRef.TryGetCSharpGraph<TypeRef>();
 		if(type != null){
 			Checkmarx.Dom.RankSpecifierCollection ranks = type.ArrayRanks;
 			if(ranks.Count != 0){
-				mylist.Add(typeRef);
+				myResultList.Add(declarator);
 			}
 		}
 	}
 }
-result = mylist;
+result = myResultList;
 ```
