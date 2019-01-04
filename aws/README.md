@@ -43,7 +43,7 @@ For AWS CLI installation, refer to [[4]]
 
 ## Create login profiles
 ```Batchfile
-> aws configure [--profile profile-name]
+aws configure [--profile profile-name]
 ```
 In addition, you can alter the entries in the AWS CLI files;  
 
@@ -74,25 +74,42 @@ Refer to [[5]] for more details
 
 ## List configuration
 ```Batchfile
-> aws configure list [--profile profile-name]
+aws configure list [--profile profile-name]
 ```
 
 ## List AMI images
 ```Batchfile
-> aws ec2 describe-images --filters "Name=tag:Name,Values=<AMI Name>" [--profile profile-name]
+aws ec2 describe-images --filters "Name=tag:Name,Values=<AMI Name>" [--profile profile-name]
 ```
 
-## Create Instance
+## Create new instance from AMI
 ```Batchfile
-> aws ec2 run-instances --region us-east-1 --image-id <Replace with AMI ID>  --count 1 --instance-type r5.xlarge --security-group-ids sg-08ca8e460f086caa9 --subnet-id subnet-03221d4d303e3893d --associate-public-ip-address --tag-specifications "ResourceType=instance,Tags=[{Key=owner,Value=<Replace with UserName>}]" "ResourceType=volume,Tags=[{Key=owner,Value=<Replace with UserName>}]"
+aws ec2 run-instances --region us-east-1 --image-id <Replace with AMI ID>  --count 1 --instance-type r5.xlarge --security-group-ids sg-08ca8e460f086caa9 --subnet-id subnet-03221d4d303e3893d --associate-public-ip-address --tag-specifications "ResourceType=instance,Tags=[{Key=owner,Value=<Replace with UserName>}]" "ResourceType=volume,Tags=[{Key=owner,Value=<Replace with UserName>}]"
 ```
 
-## List Instance
+## List instances
 ```Batchfile
-> aws aws ec2 describe-instances --filters "Name=tag:owner,Values=<Replace with UserName>" [--profile profile-name]
+aws ec2 describe-instances --filters "Name=tag:owner,Values=<Replace with UserName>" [--profile profile-name]
+
+aws ec2 describe-instances --instance-id <Replace with InstanceID> [--profile profile-name]
 ```
 
-## References
+## Start instance
+```Batchfile
+aws ec2 start-instances --instance-id <Replace with InstanceID> [--profile profile-name]
+```
+
+## Stop instances
+```Batchfile
+aws ec2 stop-instances --instance-id <Replace with InstanceID> [--profile profile-name]
+```
+
+## Terminate instances
+```Batchfile
+aws ec2 terminate-instances --instance-id <Replace with InstanceID> [--profile profile-name]
+```
+
+# References
 Configuring the Connection to a Source Control System on CxSAST [[1]]  
 Git with AWS CodeCommit Tutorial [[2]]  
 Introducing Git Credentials: A Simple Way to Connect to AWS CodeCommit Repositories Using a Static User Name and Password [[3]]  

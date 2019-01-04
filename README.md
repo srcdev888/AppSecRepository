@@ -23,3 +23,4 @@ Purpose:  This repository documents my learning for Application Security: Checkm
 * [GitLab CI Shell Runner with CxSAST](gitlabCIShell/README.md)
 * [CxSAST SAST/OSA scans with Source Pulling](SourcePull/README.md)
 * [AWS CodeCommit, CodeBuild, CodePipeline](aws/README.md)
+* [Jenkins Pipeline to push Jira ticket with SAST findings](https://github.com/cx-demo/cx_groovy)
