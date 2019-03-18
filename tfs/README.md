@@ -64,7 +64,7 @@ witadmin importwitd /collection:CollectionURL [/p:Project] /f:FileName [/e:Encod
 4. Refresh the portal page to view the changes
 5. Export the XML Report from CxSAST
 6. Edit the global variables in script 'CxTFS2017.py' [[6]]  
-Note:
+  Note:
     - authenticate using Personal Access Token (PAT) [[10]] to authenticate to the TFS
     - usage of library 'keyring' [[9]] to store the authentication token in the base64 encoded {username}:{personalaccesstoken}
 7. Execute the python script, it will;
