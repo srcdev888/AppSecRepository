@@ -68,7 +68,7 @@ witadmin importwitd /collection:CollectionURL [/p:Project] /f:FileName [/e:Encod
     - authenticate using Personal Access Token (PAT) [[10]] to authenticate to the TFS
     - usage of library 'keyring' [[9]] to store the authentication token in the base64 encoded {username}:{personalaccesstoken}
 7. Execute the python script, it will;
-  - import in 'New' issues found in the report as work item  
+  - import in 'New' issues found in the report as work item
   - flag existing work item as 'Resolved' if no longer found in report
 
 ## References
