@@ -64,9 +64,24 @@ witadmin importwitd /collection:CollectionURL [/p:Project] /f:FileName [/e:Encod
 4. Refresh the portal page to view the changes
 5. Export the XML Report from CxSAST
 6. Edit the global variables in script 'CxTFS2017.py' [[6]]  
+
   Note:
     - authenticate using Personal Access Token (PAT) [[10]] to authenticate to the TFS
     - usage of library 'keyring' [[9]] to store the authentication token in the base64 encoded {username}:{personalaccesstoken}
+
+| Variables     | Description               |
+| ------------- |---------------------------|
+| MAX_CX_RESULTS | Max number of results to be imported |
+| CXSAST_RESULTS_XML | Path of CxSAST XML Report |
+| SERVICE_NAME | Keyring service name |
+| API_VERSION | Azure DevOps/TFS API Version [[3]] |
+| USER_NAME | Azure DevOps/TFS username |
+| TFS2017_URL | Azure DevOps/TFS Collection URL e.g., http://localhost:8081/tfs/DefaultCollection/ |
+| PROJECT_NAME | Azure DevOps/TFS project name |
+| SIMILARITY_ID_FIELD | Azure DevOps/TFS customized 'Similarity ID' field name e.g., Checkmarx.SimilarityID |
+| NODE_ID_FIELD | Azure DevOps/TFS customized 'Node ID' field name e.g., Checkmarx.NodeID |
+| IGNORE_FP | ignore result flagged 'false-positive'; not imported |
+
 7. Execute the python script, it will;
   - import in 'New' issues found in the report as work item
   - flag existing work item as 'Resolved' if no longer found in report
