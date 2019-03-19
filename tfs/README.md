@@ -73,9 +73,9 @@ witadmin importwitd /collection:CollectionURL [/p:Project] /f:FileName [/e:Encod
 | ------------- |---------------------------|
 | MAX_CX_RESULTS | Max number of results to be imported |
 | CXSAST_RESULTS_XML | Path of CxSAST XML Report |
-| SERVICE_NAME | Keyring service name |
+| SERVICE_NAME | Keyring indexing label |
 | API_VERSION | Azure DevOps/TFS API Version [[3]] |
-| USER_NAME | Azure DevOps/TFS username |
+| USER_NAME | Azure DevOps/TFS username, used for keyring indexing |
 | TFS2017_URL | Azure DevOps/TFS Collection URL e.g., http://localhost:8081/tfs/DefaultCollection/ |
 | PROJECT_NAME | Azure DevOps/TFS project name |
 | SIMILARITY_ID_FIELD | Azure DevOps/TFS customized 'Similarity ID' field name e.g., Checkmarx.SimilarityID |
