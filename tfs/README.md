@@ -32,7 +32,7 @@ This tutorial was only possible through the hard work of https://github.com/CxTy
   - Priority  
   - Deep link  
 
-4.	Read result entries and create new work items in Azure DevOps/TFS via custom script. Requires Microsoft's REST APIs[[3]] and authentication token [[8]] to utilize API calls to create/update/delete Work Items.
+4.	Read result entries and create new work items in Azure DevOps/TFS via custom script. Requires Microsoft's REST APIs for Azure DevOps [[4]] or TFS [[5]] for TFS and authentication token [[8]] to utilize API calls to create/update/delete Work Items.
   - TFS2018 Work Item script source [[6]]
   - Azure DevOps Work Item script source [[7]]
 
@@ -63,11 +63,9 @@ witadmin importwitd /collection:CollectionURL [/p:Project] /f:FileName [/e:Encod
 ```
 4. Refresh the portal page to view the changes
 5. Export the XML Report from CxSAST
-6. Edit the global variables in script 'CxTFS2017.py' [[6]]  
-
-  Note:
-    - authenticate using Personal Access Token (PAT) [[10]] to authenticate to the TFS
-    - usage of library 'keyring' [[9]] to store the authentication token in the base64 encoded {username}:{personalaccesstoken}
+6. Edit the global variables in script 'CxTFS2017.py' [[6]]. Note the following;
+  - authenticate using Personal Access Token (PAT) [[10]] to authenticate to the TFS
+  - usage of library 'keyring' [[9]] to store the authentication token in the base64 encoded {username}:{personalaccesstoken}
 
 | Variables     | Description               |
 | ------------- |---------------------------|
@@ -83,7 +81,7 @@ witadmin importwitd /collection:CollectionURL [/p:Project] /f:FileName [/e:Encod
 | IGNORE_FP | ignore result flagged 'false-positive'; not imported |
 
 7. Execute the python script, it will;
-  - import in 'New' issues found in the report as work item
+  - import in 'New' & 'High' severity issues found in the report as work item
   - flag existing work item as 'Resolved' if no longer found in report
 
 ## References
