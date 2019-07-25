@@ -25,3 +25,7 @@ Purpose:  This repository documents my learning for Application Security: Checkm
 * [AWS CodeCommit, CodeBuild, CodePipeline](aws/README.md)
 * [Jenkins Pipeline to push Jira ticket with SAST findings](https://github.com/cx-demo/cx_groovy)
 * [Azure DevOps and TFS Issue Tracking with Checkmarx](tfs/README.md)
+* [TFVC with Azure DevOps via VSCode](tfvc/README.md)
+
+# Miscellaneous
+* [Cloning machines on HyperV](hyperv/README.md)
