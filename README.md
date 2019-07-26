@@ -26,4 +26,5 @@ Purpose:  This repository documents my learning for Application Security: Checkm
 * [Jenkins Pipeline to push Jira ticket with SAST findings](https://github.com/cx-demo/cx_groovy)
 * [Azure DevOps and TFS Issue Tracking with Checkmarx](tfs/README.md)
 * [CxIAST CI](cxiast-ci/README.md)
-* [Create your Active Directory Labs with Powershell](ad-lab/README.md)
+* [CxSAST services script](powershell/services)
+* [Create your Active Directory Labs with Powershell](powershell/ad-lab)
