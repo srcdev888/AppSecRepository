@@ -27,4 +27,4 @@ Purpose:  This repository documents my learning for Application Security: Checkm
 * [Azure DevOps and TFS Issue Tracking with Checkmarx](tfs/README.md)
 * [CxIAST CI](cxiast-ci/README.md)
 * [CxSAST services script](powershell/services)
-* [Create your Active Directory Labs with Powershell](powershell/ad-lab)
+* [Create Active Directory Labs with Powershell](powershell/ad-lab)
