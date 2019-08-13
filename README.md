@@ -29,8 +29,6 @@ Purpose:  This repository documents my learning for Application Security: Checkm
 
 # Miscellaneous
 * [Cloning machines on HyperV](hyperv/README.md)
-
-=======
 * [CxIAST CI](cxiast-ci/README.md)
 * [Checkmarx services script](powershell/services/README.md)
-* [Create Active Directory Labs with Powershell](powershell/ad-lab)
+* [Create Active Directory Labs with Powershell](powershell/lab)

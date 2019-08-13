@@ -1,4 +1,4 @@
-# Create Active Directory Labs with Powershell
+# Create Active Directory Labs with Powershell *Uncompleted*
 * Author:   Pedric Kng  
 * Updated:  26 Jul 2019
 
