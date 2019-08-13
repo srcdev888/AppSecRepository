@@ -25,8 +25,7 @@ Purpose:  This repository documents my learning for Application Security: Checkm
 * [AWS CodeCommit, CodeBuild, CodePipeline](aws/README.md)
 * [Jenkins Pipeline to push Jira ticket with SAST findings](https://github.com/cx-demo/cx_groovy)
 * [Azure DevOps and TFS Issue Tracking with Checkmarx](tfs/README.md)
-<<<<<<< HEAD
-* [TFVC with Azure DevOps via VSCode](tfvc/README.md)
+* [TFVC with Azure DevOps Service via VSCode](tfvc/README.md)
 
 # Miscellaneous
 * [Cloning machines on HyperV](hyperv/README.md)
@@ -35,5 +34,3 @@ Purpose:  This repository documents my learning for Application Security: Checkm
 * [CxIAST CI](cxiast-ci/README.md)
 * [Checkmarx services script](powershell/services/README.md)
 * [Create Active Directory Labs with Powershell](powershell/ad-lab)
-
->>>>>>> 0bc93f9ea35236255593fceeb7c5b23fcee8b329
