@@ -1,4 +1,4 @@
-param([Parameter(Mandatory=$true, HelpMessage="Start, Stop or Restart")][ValidateSet(“Start”,”Stop",”Restart")][string]$Action)
+param([Parameter(Mandatory=$true, HelpMessage="Start, Stop or Restart")][ValidateSet('start','stop','restart')][string]$Action)
 
 
 .\MaintainService.ps1 "World Wide Web Publishing Service" $Action
