@@ -1,0 +1,2 @@
+CXUN=administrator
+CXPW=N7BviBTGnS3J0D3+cd1r/dxseLxCi+qy

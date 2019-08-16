@@ -1,0 +1,48 @@
+8/14/2019 11:51:11 PM: ------------------------------------------
+8/14/2019 11:51:11 PM: Argument: userexist
+8/14/2019 11:51:11 PM: Argument: loggingenabled=true
+8/14/2019 11:51:11 PM: Argument: user=administrator
+8/14/2019 11:51:11 PM: Argument: match=username
+8/14/2019 11:51:11 PM: CLI Action - Determine if User Exists
+8/14/2019 11:51:14 PM: Private SOAP:True:
+8/14/2019 11:51:14 PM: Public SOAP:False:
+8/14/2019 11:51:14 PM: Cannot obtain sessionID! API calls will fail.
+8/14/2019 11:51:14 PM: Activating Session:ERROR: Portal-  / SDK - Password has to be changed on the first login to the system. Please connect to Checkmarx portal to change your password.
+8/14/2019 11:51:14 PM: ERROR: Portal-  / SDK - Password has to be changed on the first login to the system. Please connect to Checkmarx portal to change your password.
+8/14/2019 11:51:53 PM: ------------------------------------------
+8/14/2019 11:51:53 PM: Argument: userexist
+8/14/2019 11:51:53 PM: Argument: loggingenabled=true
+8/14/2019 11:51:53 PM: Argument: user=administrator
+8/14/2019 11:51:53 PM: Argument: match=username
+8/14/2019 11:51:53 PM: CLI Action - Determine if User Exists
+8/14/2019 11:51:57 PM: Private SOAP:True:
+8/14/2019 11:51:57 PM: Public SOAP:False:
+8/14/2019 11:51:57 PM: Cannot obtain sessionID! API calls will fail.
+8/14/2019 11:51:57 PM: Activating Session:ERROR: Portal-  / SDK - Password has to be changed on the first login to the system. Please connect to Checkmarx portal to change your password.
+8/14/2019 11:51:57 PM: ERROR: Portal-  / SDK - Password has to be changed on the first login to the system. Please connect to Checkmarx portal to change your password.
+8/14/2019 11:52:37 PM: ------------------------------------------
+8/14/2019 11:52:37 PM: Argument: userexist
+8/14/2019 11:52:37 PM: Argument: loggingenabled=true
+8/14/2019 11:52:37 PM: Argument: user=administrator
+8/14/2019 11:52:37 PM: Argument: match=username
+8/14/2019 11:52:37 PM: CLI Action - Determine if User Exists
+8/14/2019 11:52:40 PM: Private SOAP:True:
+8/14/2019 11:52:40 PM: Public SOAP:True:
+8/14/2019 11:52:40 PM: Obtained Session IDs For PORTAL And SDK APIs
+8/14/2019 11:52:40 PM: Activating Session:True
+8/14/2019 11:52:40 PM: Retrieving list of users..
+8/14/2019 11:52:40 PM: 7 users loaded
+8/14/2019 11:52:40 PM: CONSOLE:TRUE
+8/15/2019 5:39:51 PM: ------------------------------------------
+8/15/2019 5:39:51 PM: Argument: userexist
+8/15/2019 5:39:51 PM: Argument: loggingenabled=true
+8/15/2019 5:39:51 PM: Argument: user=administrator
+8/15/2019 5:39:51 PM: Argument: match=username
+8/15/2019 5:39:51 PM: CLI Action - Determine if User Exists
+8/15/2019 5:39:54 PM: Private SOAP:True:
+8/15/2019 5:39:54 PM: Public SOAP:True:
+8/15/2019 5:39:54 PM: Obtained Session IDs For PORTAL And SDK APIs
+8/15/2019 5:39:54 PM: Activating Session:True
+8/15/2019 5:39:54 PM: Retrieving list of users..
+8/15/2019 5:39:54 PM: 7 users loaded
+8/15/2019 5:39:54 PM: CONSOLE:TRUE

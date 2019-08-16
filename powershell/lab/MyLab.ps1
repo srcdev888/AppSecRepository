@@ -9,8 +9,8 @@
     - Number of users per service OU {Amount}
     - User password {$userPassword}
 
-.PARAMETER Action 
-    Specifies the script action. 'Create' to build, 'Remove' to delete 
+.PARAMETER Action
+    Specifies the script action. 'Create' to build, 'Remove' to delete
 
 .EXAMPLE
     PS> AD-Lab -Action "Create"
@@ -53,7 +53,7 @@ function Remove-MyLab {
 }
 
 function New-MyLab {
-    
+
     #New-ADOrganizationalUnit -Name $FirstOU -Description $FirstOU -Path "DC=$Dom,DC=$EXT" -ProtectedFromAccidentalDeletion $false
     New-ADOU -Name $FirstOU -Description $FirstOU -Path "DC=$Dom,DC=$EXT"
 
@@ -61,7 +61,7 @@ function New-MyLab {
     {
         #New-ADOrganizationalUnit -Name $S -Description "$S"  -Path "OU=$FirstOU,DC=$Dom,DC=$EXT" -ProtectedFromAccidentalDeletion $false
         New-ADOU -Name $S -Description "$S" -Path "OU=$FirstOU,DC=$Dom,DC=$EXT"
-       
+
 
         foreach ($Serv in $Services)
         {
@@ -69,7 +69,7 @@ function New-MyLab {
             New-ADOU -Name $Serv -Description "$S" -Path "OU=$S,OU=$FirstOU,DC=$Dom,DC=$EXT"
 
             foreach ($Grp in $Groups){
-                
+
                 #New-ADGroup -Name "$S-$Serv-$Grp" -Description "$S $Serv $Grp" -Path "OU=$S,OU=$FirstOU,DC=$Dom,DC=$EXT" -GroupCategory Security -GroupScope DomainLocal -PassThru
                 New-ADGrp -Name "$S-$Serv-$Grp" -Description "$S $Serv $Grp" -Path "OU=$S,OU=$FirstOU,DC=$Dom,DC=$EXT" -GroupCategory Security -GroupScope DomainLocal
 
@@ -86,7 +86,7 @@ function New-MyLab {
                             }
                     Default {}
                 }
-            
+
                 foreach ($user in $Users)
                 {
                     <#
@@ -109,12 +109,12 @@ function New-MyLab {
                         }
                     #>
                     $newUserProperties = New-ADUsrProp -user $user -Path "OU=$Serv,OU=$S,OU=$FirstOU,dc=$Dom,dc=$EXT" -fulldomain $fulldomain -userPassword $userPassword
-                    
+
                     Try{
-                     
+
                         # New-ADUser @newUserProperties
                         New-ADUsr $newUserProperties
-                        
+
 
                         #Add-ADGroupMember -Identity "CN=$S-$Serv-$Grp,OU=$S,OU=$FirstOU,DC=$Dom,DC=$EXT" -Members $newUserProperties.SamAccountName
                         Add-ADGrpMember -Identity "CN=$S-$Serv-$Grp,OU=$S,OU=$FirstOU,DC=$Dom,DC=$EXT" -newUserProperties $newUserProperties
