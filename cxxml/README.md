@@ -203,12 +203,68 @@ As part of the pipeline, the build will failed upon;
 - New vulnerability found ($status_new)
 - Result not been reviewed/verified ($to_verify)
 
+Powershell script [gitlabexample.PS1](gitlabexample.PS1) has been composed to retrieve the values from the downloaded XML report
+
 ```powershell
 $results = .\parseXMLFile.PS1 $xmlreport
 If( $results[0] -ne '0' -or $results[5] -ne '0'){
     Write-Host "New vulnerability or Non-reviewed results found"
     Exit 1
 }
+```
+
+In Gitlab CI, [.gitlab-ci.yml](https://gitlab.com/cxdemosg/dvja/blob/checkmarx-test/.gitlab-ci.yml) is used to describe the pipeline.
+
+```yml
+default:
+  image: maven:latest
+
+stages:
+  - build
+  - test
+  - post-test
+  - deploy
+
+build:
+  stage: build
+  script:
+    - "mvn package"
+    - echo "build"
+
+checkmarx-test:
+  stage: test
+  image: java:8
+  before_script:
+    - wget -O ~/../cxcli.zip https://download.checkmarx.com/8.9.0/Plugins/CxConsolePlugin-8.90.0.zip
+    - unzip ~/../cxcli.zip -d ~/../cxcli
+    - chmod +x ~/../cxcli/runCxConsole.sh
+  script:
+    - ~/../cxcli/runCxConsole.sh Scan -CxServer "$CX_SERVER" -CxUser "$CX_USER" -CxPassword "$CX_PASSWORD" -ProjectName "$CX_TEAM\\$CI_PROJECT_NAME-$CI_COMMIT_REF_NAME" -preset "$CX_PRESET" -LocationType folder -LocationPath $CI_PROJECT_DIR -ReportXML $CI_PROJECT_DIR/results-$CI_PROJECT_NAME-$CI_COMMIT_REF_NAME.xml -ReportPDF $CI_PROJECT_DIR/results-$CI_PROJECT_NAME-$CI_COMMIT_REF_NAME.pdf -Comment "git $CI_COMMIT_REF_NAME@$CI_COMMIT_SHA" -verbose
+    - echo "checkmarx-test"
+  artifacts:
+    name: "$CI_JOB_NAME-$CI_COMMIT_REF_NAME"
+    expire_in: 1 day
+    paths:
+      - results-$CI_PROJECT_NAME-$CI_COMMIT_REF_NAME.pdf
+      - results-$CI_PROJECT_NAME-$CI_COMMIT_REF_NAME.xml
+
+checkmarx-xml:
+  stage: post-test
+  image: mcr.microsoft.com/powershell:latest
+#  variables:
+#    GIT_STRATEGY: none
+  before_script:
+    - apt update && apt upgrade
+    - apt-get -y install wget
+    - wget -O ~/../parseXMLFile.PS1 https://raw.githubusercontent.com/cx-demo/MyAppSecRepository/master/cxxml/parseXMLFile.PS1
+    - chmod +x ~/../parseXMLFile.PS1
+    - wget -O ~/../gitlabexample.PS1 https://raw.githubusercontent.com/cx-demo/MyAppSecRepository/master/cxxml/gitlabexample.PS1
+    - chmod +x ~/../gitlabexample.PS1
+  script:
+    - pwd
+    - ls
+    - ~/.././gitlabexample.PS1 results-$env:$CI_PROJECT_NAME-$env:$CI_COMMIT_REF_NAME.xml
+
 ```
 
 ### References
