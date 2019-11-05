@@ -1,16 +1,35 @@
-# Parsing CxXML Results
+# Parsing Results in CxXML Report
 * Author:   Pedric Kng  
-* Updated:  04 Nov 2019
+* Updated:  05 Nov 2019
 
 As part of integration into CI pipeline with Checkmarx, there is a need to retrieve certain statistics to determine next step e.g., failed/flag build, notifications.
+
 Checkmarx offers plugin/CLI to execute scans, whereby XML report can be retrieved; note that this is possible only with synchronous scan.
 The CX XML report offers many important statistics on each result e.g., result status, state, severity, code snippets, query information.
 
-The purpose of this article is to share steps on how to extract values from CX XML report, whereby such values can be used to aid in CI pipeline decision making.
+The purpose of this article is to share an example on how to extract values from CX XML report, whereby such values can be used to aid in CI pipeline decision making.
 
 ***
 ## Overview
-This article leverages on a Powershell script [parseXMLFile.PS1](parseXMLFile.PS1) to extract result details.
+We will walkthrough an example[[1]] based on Gitlab CI, where the pipeline workflow is;
+
+1. Execute checkmarx scan and download the XML report
+2. Should scan be successful, parse XML report and failed pipeline upon;
+ - New result is reported (key: $status_new)
+ - Exist result that have not been reviewed (key: $to_verify); Flag as 'To verify'
+
+## Pre-requisites and Dependencies
+The example has namely several pre-requisites and dependencies;  
+1. [Powershell](#Powershell)
+2. [Report parsing script](#Report-parsing-script)
+3. [Result processing script](#Result-processing-script)
+
+### Powershell
+The example will use powershell scripts to parse the XML report, and in this will use a powershell docker image ['mcr.microsoft.com/powershell:latest'](https://hub.docker.com/_/microsoft-powershell) to process the results based on Linux Bash (Gitlab shared runner).
+
+### Report parsing script
+This project is dependent on a powershell script [parseXMLFile.PS1](parseXMLFile.PS1) to extract result details from the Checkmarx XML report.
+
 ```powershell
 param([string]$resultsFile)
 ###### VARIABLES ######
@@ -195,25 +214,37 @@ The script summarizes and returns
 | Description | $description      | Result Description |
 | ScanLink | $scanLink     | Project URL link to Checkmarx portal |
 
+### Result processing script
+This example also requires another powershell script [gitlabexample.PS1](gitlabexample.PS1) has to execute the report parsing script in Gitlab CI, process returned findings and determine the condition to pass or fail the pipeline accordingly.
 
-### Example
-The example [[1]] uses Gitlab CI to start a scan whereby the XML report is downloaded and uses a windows powershell docker image 'mcr.microsoft.com/powershell:latest' to process the results.
+```Powershell
+#! /usr/bin/pwsh
 
-As part of the pipeline, the build will failed upon;
-- New vulnerability found ($status_new)
-- Result not been reviewed/verified ($to_verify)
-
-Powershell script [gitlabexample.PS1](gitlabexample.PS1) has been composed to retrieve the values from the downloaded XML report
-
-```powershell
-$results = .\parseXMLFile.PS1 $xmlreport
-If( $results[0] -ne '0' -or $results[5] -ne '0'){
-    Write-Host "New vulnerability or Non-reviewed results found"
+param([string]$resultsFile)
+echo $PSVersionTable
+$results = & "~/.././parseXMLFile.PS1" "$resultsFile"
+If( $results[0] -ne '0' -or $results[5] -ne '0') {
+    Write-Host "Error: New vulnerability or Non-reviewed results found"
     Exit 1
 }
 ```
+** Note: Powershell working in bash container requires specifying the powershell executable in the header, this can be found via this command
+```Bash
+>> which pwsh
+```
+** Note: Should the powershell script execution failed, please check the PS Version
+```Powershell
+>> echo $PSVersionTable
+```
 
-In Gitlab CI, [.gitlab-ci.yml](https://gitlab.com/cxdemosg/dvja/blob/checkmarx-test/.gitlab-ci.yml) is used to describe the pipeline.
+
+## Integration into Gitlab CI
+Gitlab CI pipeline is described via .gitlab-ci.yml included in the project sources, a simple 3 stages pipeline is described below;
+1. build - Compile and build project
+2. test - Execute checkmarx SAST scan and download XML report
+3. post-test - Parse XML report and determine to fail/pass pipeline
+
+The example yml is listed below, or in the [Example repository](https://gitlab.com/cxdemosg/dvja/blob/checkmarx-test/.gitlab-ci.yml);
 
 ```yml
 default:
@@ -223,13 +254,11 @@ stages:
   - build
   - test
   - post-test
-  - deploy
 
 build:
   stage: build
   script:
-    - "mvn package"
-    - echo "build"
+    - mvn package
 
 checkmarx-test:
   stage: test
@@ -240,7 +269,6 @@ checkmarx-test:
     - chmod +x ~/../cxcli/runCxConsole.sh
   script:
     - ~/../cxcli/runCxConsole.sh Scan -CxServer "$CX_SERVER" -CxUser "$CX_USER" -CxPassword "$CX_PASSWORD" -ProjectName "$CX_TEAM\\$CI_PROJECT_NAME-$CI_COMMIT_REF_NAME" -preset "$CX_PRESET" -LocationType folder -LocationPath $CI_PROJECT_DIR -ReportXML $CI_PROJECT_DIR/results-$CI_PROJECT_NAME-$CI_COMMIT_REF_NAME.xml -ReportPDF $CI_PROJECT_DIR/results-$CI_PROJECT_NAME-$CI_COMMIT_REF_NAME.pdf -Comment "git $CI_COMMIT_REF_NAME@$CI_COMMIT_SHA" -verbose
-    - echo "checkmarx-test"
   artifacts:
     name: "$CI_JOB_NAME-$CI_COMMIT_REF_NAME"
     expire_in: 1 day
@@ -251,8 +279,9 @@ checkmarx-test:
 checkmarx-xml:
   stage: post-test
   image: mcr.microsoft.com/powershell:latest
-#  variables:
-#    GIT_STRATEGY: none
+  variables:
+   GIT_STRATEGY: none
+   XML_REPORT: $CI_PROJECT_DIR/results-$CI_PROJECT_NAME-$CI_COMMIT_REF_NAME.xml
   before_script:
     - apt update && apt upgrade
     - apt-get -y install wget
@@ -261,13 +290,10 @@ checkmarx-xml:
     - wget -O ~/../gitlabexample.PS1 https://raw.githubusercontent.com/cx-demo/MyAppSecRepository/master/cxxml/gitlabexample.PS1
     - chmod +x ~/../gitlabexample.PS1
   script:
-    - pwd
-    - ls
-    - ~/.././gitlabexample.PS1 results-$env:$CI_PROJECT_NAME-$env:$CI_COMMIT_REF_NAME.xml
-
+    - ~/.././gitlabexample.PS1 $XML_REPORT
 ```
 
-### References
+## References
 Gitlab CI example on parsing CX XML report [[1]]  
 
 [1]:https://gitlab.com/cxdemosg/dvja "Example on parsing CX XML report with Gitlab CI"  
