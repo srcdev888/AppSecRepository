@@ -244,3 +244,31 @@ Note that the above query will also return result for the below Java codes, furt
 Map response3 = new HashMap<String, String[]>();
 Map<String, String[]> response2 = new HashMap<>();
 ```
+
+
+### Remove results with source under same filename
+This exercise seeks to remove resultflows with same source filename
+
+```csharp
+CxList rawResults = base.App_Transport_Security_Bypass();
+
+List<string> fileNamesList = new List<string>();
+
+foreach (CxList rawResult in rawResults)
+{
+	CSharpGraph g = rawResult.TryGetCSharpGraph<CSharpGraph>();
+
+	if(g != null && g.LinePragma != null)
+	{
+		string fileName = g.LinePragma.FileName;
+		if(!fileNamesList.Contains(fileName))
+		{
+			fileNamesList.Add(fileName);
+			result.Add(rawResult);
+		}
+	}		
+}
+
+```
+
+
