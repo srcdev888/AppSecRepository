@@ -14,6 +14,7 @@ The exercises highlighted here are for the sake of capability demonstration and 
 * [Filter based on iteration statement conditions](#Filter-based-on-iteration-statement-conditions)
 * [Sanitize path by node](#Sanitize-path-by-node)
 * [Find Declarator of String Array Type](#Find-Declarator-of-String-Array-Type)
+* [Remove results with source under same filename](#Remove-results-with-source-under-same-filename)
 
 ***
 ## Basic Exercises
