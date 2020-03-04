@@ -1,0 +1,23 @@
+[Unit]
+Description=Cx IAST Java-Agent Demo service
+After=syslog.target network.target
+
+[Service]
+Type=forking
+
+User=cxdemo
+
+WorkingDirectory=/home/cxdemo/CxIAST
+
+Environment=CATALINA_BASE=/home/cxdemo/CxIAST/Manager
+Environment=CATALINA_HOME=$CATALINA_BASE/../Tomcat
+
+ExecStart=/home/cxdemo/CxIAST/Agent/CxIAST.sh  -e /home/cxdemo/CxIAST/Demo/bin/$
+ExecStop=/home/cxdemo/CxIAST/Demo/bin/stop.sh
+
+Restart=on-failure
+# Other restart options: always, on-abort, etc
+
+[Install]
+WantedBy=default.target
+
