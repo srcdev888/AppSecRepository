@@ -44,6 +44,9 @@ tail -f /var/log/syslog
 List all services
 ```bash
 sudo systemctl
+
+sudo systemctl list-units --type=service
+sudo systemctl --type=service
 ```
 
 If service already exists, you need to stop the service.
