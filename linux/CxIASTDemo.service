@@ -12,7 +12,7 @@ WorkingDirectory=/home/cxdemo/CxIAST
 Environment=CATALINA_BASE=/home/cxdemo/CxIAST/Manager
 Environment=CATALINA_HOME=$CATALINA_BASE/../Tomcat
 
-ExecStart=/home/cxdemo/CxIAST/Agent/CxIAST.sh  -e /home/cxdemo/CxIAST/Demo/bin/$
+ExecStart=/home/cxdemo/CxIAST/Agent/CxIAST.sh  -e /home/cxdemo/CxIAST/Demo/bin/start.sh
 ExecStop=/home/cxdemo/CxIAST/Demo/bin/stop.sh
 
 Restart=on-failure
