@@ -1,0 +1,18 @@
+[Unit]
+Description=Cx Access Control Service
+After=syslog.target network.target
+
+[Service]
+Type=simple
+User=cxdemo
+
+WorkingDirectory=/home/cxdemo/CxIAST
+
+ExecStart=/bin/bash -c 'dotnet ./CxAccessControl/Cx.AccessControl.dll'
+ExecStop=/home/cxdemo/CxIAST/CxAccessControl/shutdown.sh
+
+Restart=on-failure
+# Other restart options: always, on-abort, etc
+
+[Install]
+WantedBy=default.target

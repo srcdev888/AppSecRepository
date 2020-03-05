@@ -21,6 +21,18 @@ tail -f /var/log/syslog
   sudo apt-get update
   sudo apt-get install dotnet-sdk-2.1
   ```
+  
+  ```bash
+  wget https://download.visualstudio.microsoft.com/download/pr/e5eef3df-d2e3-429b-8204-f58372eb6263/20c825ddcc6062e93ff0c60e8354d3af/dotnet-sdk-2.1.500-linux-x64.tar.gz
+  sudo mkdir -p /opt/dotnet && sudo tar zxf dotnet-sdk-2.1.500-linux-x64.tar.gz -C /opt/dotnet
+  sudo ln -s /opt/dotnet/dotnet /usr/local/bin
+  dotnet --info
+  ```
+## Remove Dotnet
+  ```bash
+  apt-get remove dotnet-host
+  ```
+  
 ## Openjdk 8 installation
   ```bash
   sudo apt-get install openjdk-8-jdk
@@ -32,6 +44,9 @@ tail -f /var/log/syslog
 List all services
 ```bash
 sudo systemctl
+
+sudo systemctl list-units --type=service
+sudo systemctl --type=service
 ```
 
 If service already exists, you need to stop the service.
@@ -65,6 +80,18 @@ sudo systemctl enable <servicename>.service
 sudo systemctl start <servicename>
 sudo systemctl status <servicename>
 ```
+
+Remove service from systemctl
+```bash
+# Reload the service configuration
+sudo systemctl stop <servicename>
+sudo systemctl disable <servicename>
+rm /etc/systemd/system/<servicename>.service
+systemctl daemon-reload
+systemctl reset-failed
+```
+
+
 
 ## References
 Introduction to Systemctl [[1]]  
