@@ -14,10 +14,8 @@ param(
     [Parameter(HelpMessage="Smtp Use Ssl, default=true")][switch]$smtpUseSSL = $true,
     [Parameter(HelpMessage="DeliveryNotificationOption")][string[]]$DeliveryNotificationOption
 )
-
 $smtpSecurePassword = ConvertTo-SecureString $smtpPassword -AsPlainText -Force
 $credential = New-Object System.Management.Automation.PSCredential ($smtpUsername, $smtpSecurePassword)
-
 $sendMailParams = @{
     From = $from
     To = $to
@@ -29,60 +27,7 @@ $sendMailParams = @{
     UseSsl = $smtpUseSSL
     Credential = $credential
 }
-
-if ($attachments.count -gt 0 ) { $sendMailParams.Add('Attachments',$attachments)}
-if ($DeliveryNotificationOption.count -gt 0 ) { $sendMailParams.Add('DeliveryNotificationOption', $DeliveryNotificationOption) }
+If($attachments.count -gt 0 ) { $sendMailParams.Add('Attachments',$attachments)}
+If($DeliveryNotificationOption.count -gt 0 ) { $sendMailParams.Add('DeliveryNotificationOption', $DeliveryNotificationOption) }
 
 Send-MailMessage @sendMailParams
-
-<#
-.SYNOPSIS
-Powershell script to send email via 'Send-MailMessage'
-
-.DESCRIPTION
-Powershell script to send email via 'Send-MailMessage'
-
-.PARAMETER from
-Email author
-
-.PARAMETER to
-Receipients, support multiple separated by ','
-
-.PARAMETER subject
-Subject
-
-.PARAMETER body
-Body
-
-.PARAMETER bodyAsHtml
-Body includes HTML
-
-.PARAMETER attachments
-Attachments, support multiple separated by ','
-
-.PARAMETER smtpServer
-SMTP Server URL
-
-.PARAMETER smtpPort
-SMTP Server port
-
-.PARAMETER smtpUsername
-SMTP login username
-
-.PARAMETER smtpPassword
-SMTP login password
-
-.PARAMETER smtpUseSSL
-SMTP use SSL, default=true
-
-.PARAMETER DeliveryNotificationOption
-Delivery notification option
-
-.LINK
-https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/send-mailmessage
-
-.NOTES
-Author: Pedric Kng
-Date:   April 15, 2020
-
-#>
