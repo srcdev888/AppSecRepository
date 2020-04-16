@@ -1,0 +1,3 @@
+# Exclude readme files
+*.md
+!README.md
