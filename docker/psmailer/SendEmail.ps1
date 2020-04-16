@@ -1,4 +1,4 @@
-# Powershell script to send email
+#! /usr/bin/pwsh
 
 param(
     [Parameter(Mandatory, HelpMessage="From")][string]$from,
@@ -35,7 +35,7 @@ if ($DeliveryNotificationOption.count -gt 0 ) { $sendMailParams.Add('DeliveryNot
 
 Send-MailMessage @sendMailParams
 
-<# 
+<#
 .SYNOPSIS
 Powershell script to send email via 'Send-MailMessage'
 
