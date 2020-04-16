@@ -75,7 +75,7 @@ param(
 	[string]$smtpServer,
 
 	[Parameter(HelpMessage="Smtp Port, default=587")]
-	[string]$smtpPort = 587,
+	[Int32]$smtpPort = 587,
 
 	[Parameter(Mandatory, HelpMessage="Smtp Username")]
 	[string]$smtpUsername,
