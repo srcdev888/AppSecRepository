@@ -2,38 +2,38 @@
 # https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/send-mailmessage
 <#
 .SYNOPSIS
-    Powershell script to send email via 'Send-MailMessage'
+Powershell script to send email via 'Send-MailMessage'
 .DESCRIPTION
-    .
+.
 .PARAMETER from
-    Email author
+Email author
 .PARAMETER to
-    Receipients, support multiple separated by ','
+Receipients, support multiple separated by ','
 .PARAMETER subject
-    Subject
+Subject
 .PARAMETER body
-    Body
+Body
 .PARAMETER bodyAsHtml
-    Body includes HTML
+Body includes HTML
 .PARAMETER attachments
-    Attachments, support multiple separated by ','
+Attachments, support multiple separated by ','
 .PARAMETER smtpServer
-    SMTP Server URL
+SMTP Server URL
 .PARAMETER smtpPort
-    SMTP Server port
+SMTP Server port
 .PARAMETER smtpUsername
-    SMTP login username
+SMTP login username
 .PARAMETER smtpPassword
-    SMTP login password
+SMTP login password
 .PARAMETER smtpUseSSL
-    Smtp use SSL, default=true
+SMTP use SSL, default=true
 .PARAMETER DeliveryNotificationOption
-    Delivery notification option
+Delivery notification option
 .LINK
-    https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/send-mailmessage
+https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/send-mailmessage
 .NOTES
-    Author: Pedric Kng
-    Date:   April 15, 2020
+Author: Pedric Kng
+Date:   April 15, 2020
 #>
 param(
     [Parameter(Mandatory, HelpMessage="From")][string]$from,
