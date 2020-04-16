@@ -106,7 +106,7 @@ $sendMailParams = @{
 
 write-host "attachments.count" $attachments.count
 
-If($attachments.count -gt 0 ) { $sendMailParams.Add('Attachments',$attachments)}
+If($attachments.count -gt 0 ) { $sendMailParams.Add('Attachments',@($attachments))}
 If($DeliveryNotificationOption.count -gt 0 ) { $sendMailParams.Add('DeliveryNotificationOption', $DeliveryNotificationOption) }
 
 write-host("List all parameters")
