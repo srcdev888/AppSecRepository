@@ -1,6 +1,3 @@
-# Powershell script to send email via 'Send-MailMessage'
-# https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/send-mailmessage
-
 <#
 .SYNOPSIS
 Powershell script to send email via 'Send-MailMessage'
