@@ -7,6 +7,3 @@
 ## DevOps Tooling
 * [Installing Jenkins container](jenkins/README.md)
 * [Powershell script mailer](psmailer/README.md)
-
-
-## Miscellaneous

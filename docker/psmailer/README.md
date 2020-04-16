@@ -28,7 +28,7 @@ The powershell script ['SendEmail.ps1'](SendEmail.ps1) uses powershell function 
 | -smtpUsername            | String | SMTP login username|
 | -smtpPassword            | String | SMTP login password|
 | -smtpUseSSL            | Switch | Smtp use SSL, default=true|
-| -DeliveryNotificationOption            | String | Delivery notification option|
+| -DeliveryNotificationOption            | String[] | Delivery notification option|
 
 ```powershell
 # See script parameters

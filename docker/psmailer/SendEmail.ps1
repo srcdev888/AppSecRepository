@@ -1,6 +1,5 @@
 # Powershell script to send email via 'Send-MailMessage'
 # https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/send-mailmessage
-
 <#
 .SYNOPSIS
     Powershell script to send email via 'Send-MailMessage'
@@ -36,7 +35,6 @@
     Author: Pedric Kng
     Date:   April 15, 2020
 #>
-
 param(
     [Parameter(Mandatory, HelpMessage="From")][string]$from,
     [Parameter(Mandatory, HelpMessage="To")][string[]]$to,
@@ -51,7 +49,6 @@ param(
     [Parameter(HelpMessage="Smtp Use Ssl, default=true")][switch]$smtpUseSSL = $true,
     [Parameter(HelpMessage="DeliveryNotificationOption")][string[]]$DeliveryNotificationOption
 )
-
 
 $smtpSecurePassword = ConvertTo-SecureString $smtpPassword -AsPlainText -Force
 $credential = New-Object System.Management.Automation.PSCredential ($smtpUsername, $smtpSecurePassword)
