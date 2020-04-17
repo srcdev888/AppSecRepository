@@ -40,7 +40,7 @@ SMTP login password
 .PARAMETER smtpUseSSL
 SMTP use SSL, default=true
 
-.PARAMETER DeliveryNotificationOption
+.PARAMETER deliveryNotificationOption
 Delivery notification option
 
 .LINK
@@ -87,7 +87,7 @@ param(
 	[switch]$smtpUseSSL = $true,
 
 	[Parameter(HelpMessage="DeliveryNotificationOption")]
-	[string[]]$DeliveryNotificationOption
+	[string[]]$deliveryNotificationOption
 )
 
 write-host "SendEmail.ps1 version 1.0 17 Apr 2020"
@@ -110,7 +110,7 @@ $sendMailParams = @{
 write-host "attachments.count" $attachments.count
 
 If($attachments.count -gt 0 ) { $sendMailParams.Add('Attachments', $attachments)}
-If($DeliveryNotificationOption.count -gt 0 ) { $sendMailParams.Add('DeliveryNotificationOption', $DeliveryNotificationOption) }
+If($DeliveryNotificationOption.count -gt 0 ) { $sendMailParams.Add('DeliveryNotificationOption', $deliveryNotificationOption) }
 
 write-host("List all parameters")
 $sendMailParams.GetEnumerator() | Sort-Object -Property key
