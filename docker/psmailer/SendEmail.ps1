@@ -90,8 +90,8 @@ param(
 	[string[]]$DeliveryNotificationOption
 )
 
-echo $smtpUsername
-echo $smtpPassword
+write-host "smtpUsername" $smtpUsername
+write-host "smtpPassword" $smtpPassword
 
 $smtpSecurePassword = ConvertTo-SecureString $smtpPassword -AsPlainText -Force
 $credential = New-Object System.Management.Automation.PSCredential ($smtpUsername, $smtpSecurePassword)
