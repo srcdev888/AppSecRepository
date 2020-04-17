@@ -65,9 +65,6 @@ param(
 	[Parameter(Mandatory, HelpMessage="Body")]
 	[string]$body,
 
-	[Parameter(HelpMessage="Body includes HTML")]
-	[switch]$bodyAsHtml = $true,
-
 	[Parameter(HelpMessage="Attachments")]
 	[string[]]$attachments,
 
@@ -82,9 +79,6 @@ param(
 
 	[Parameter(Mandatory, HelpMessage="Smtp Password")]
 	[string]$smtpPassword,
-
-	[Parameter(HelpMessage="Smtp Use Ssl, default=true")]
-	[switch]$smtpUseSSL = $true,
 
 	[Parameter(HelpMessage="DeliveryNotificationOption")]
 	[string[]]$deliveryNotificationOption
@@ -103,7 +97,7 @@ $sendMailParams = @{
     BodyAsHtml = $true
     SMTPServer = $smtpServer
     Port = $smtpPort
-    UseSsl = $smtpUseSSL
+    UseSsl = $true
     Credential = $credential
 }
 
