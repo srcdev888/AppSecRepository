@@ -92,10 +92,8 @@ param(
 
 write-host "SendEmail.ps1 version 1.0 17 Apr 2020"
 
-write-host "smtpUsername" $smtpUsername
-write-host "smtpPassword" $smtpPassword
-
 $smtpSecurePassword = ConvertTo-SecureString $smtpPassword -AsPlainText -Force
+
 $credential = New-Object System.Management.Automation.PSCredential ($smtpUsername, $smtpSecurePassword)
 $sendMailParams = @{
     From = $from
