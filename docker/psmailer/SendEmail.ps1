@@ -90,6 +90,8 @@ param(
 	[string[]]$DeliveryNotificationOption
 )
 
+write-host "SendEmail.ps1 version 1.0 17 Apr 2020"
+
 write-host "smtpUsername" $smtpUsername
 write-host "smtpPassword" $smtpPassword
 
