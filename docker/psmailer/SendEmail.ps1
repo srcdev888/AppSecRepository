@@ -90,6 +90,9 @@ param(
 	[string[]]$DeliveryNotificationOption
 )
 
+echo $smtpUsername
+echo $smtpPassword
+
 $smtpSecurePassword = ConvertTo-SecureString $smtpPassword -AsPlainText -Force
 $credential = New-Object System.Management.Automation.PSCredential ($smtpUsername, $smtpSecurePassword)
 $sendMailParams = @{
@@ -106,7 +109,7 @@ $sendMailParams = @{
 
 write-host "attachments.count" $attachments.count
 
-If($attachments.count -gt 0 ) { $sendMailParams.Add('Attachments',@($attachments))}
+If($attachments.count -gt 0 ) { $sendMailParams.Add('Attachments', $attachments)}
 If($DeliveryNotificationOption.count -gt 0 ) { $sendMailParams.Add('DeliveryNotificationOption', $DeliveryNotificationOption) }
 
 write-host("List all parameters")
