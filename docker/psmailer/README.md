@@ -138,13 +138,18 @@ email-report:
     - pwsh -Command ./SendEmail.ps1 -from "'$FROM'" -to "'$TO'" -subject "'$SUBJECT'" -body "'$BODY'" -smtpServer $SMTPSERVER -smtpPort $SMTPPORT -smtpUsername $SMTPUSERNAME -smtpPassword $SMTPPASSWORD -attachment $PDF_REPORT
 ```
 
+If the script cannot be copied to the local repository, can leverage on wget to pull the powershell script remotely. See example [[5]]
+
+
 ## References
 Powershell Send-MailMessage [[1]]  
 Define variables in Azure DevOps [[2]]  
 Add & use variable groups [[3]]  
 Masked variables [[4]]  
+DVJA Pipeline [[5]]  
 
 [1]:https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/send-mailmessage "Powershell Send-MailMessage"
 [2]:https://docs.microsoft.com/en-us/azure/devops/pipelines/process/variables?view=azure-devops&tabs=yaml%2Cbatch "Define variables in Azure DevOps"
 [3]:https://docs.microsoft.com/en-us/azure/devops/pipelines/library/variable-groups?view=azure-devops "Add & use variable groups"
 [4]:https://docs.gitlab.com/ee/ci/variables/#masked-variables "Masked variables"
+[5]:https://gitlab.com/cxdemosg/dvja/-/blob/checkmarx-emailreport/.gitlab-ci.yml "DVJA Pipeline"
