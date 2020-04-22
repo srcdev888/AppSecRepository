@@ -22,13 +22,11 @@ The powershell script ['SendEmail.ps1'](SendEmail.ps1) uses powershell function 
 | -to           | String[] | Receipients, support multiple separated by ',' |
 | -subject            |  String | Email subject|
 | -body            | String | Email Body|
-| -bodyAsHtml            | Switch | Body includes HTML |
 | -attachments            | String[] | Attachments, support multiple separated by ','|
 | -smtpServer            | String | SMTP Server URL|
 | -smtpPort            | String | SMTP Server port|
 | -smtpUsername            | String | SMTP login username|
 | -smtpPassword            | String | SMTP login password|
-| -smtpUseSSL            | Switch | Smtp use SSL, default=true|
 | -deliveryNotificationOption            | String[] | Delivery notification option|
 
 
