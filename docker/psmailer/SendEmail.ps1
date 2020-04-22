@@ -87,8 +87,11 @@ param(
 write-host "SendEmail.ps1 version 1.0 17 Apr 2020"
 
 $smtpSecurePassword = ConvertTo-SecureString $smtpPassword -AsPlainText -Force
-
 $credential = New-Object System.Management.Automation.PSCredential ($smtpUsername, $smtpSecurePassword)
+
+#write-host "username " $credential.Username
+#write-host "password " $credential.GetNetworkCredential().Password
+
 $sendMailParams = @{
     From = $from
     To = $to
@@ -101,12 +104,14 @@ $sendMailParams = @{
     Credential = $credential
 }
 
-write-host "attachments.count" $attachments.count
+#write-host("print Size")
+#$sendMailParams.Count
+#write-host "attachments.count" $attachments.count
 
 If($attachments.count -gt 0 ) { $sendMailParams.Add('Attachments', $attachments)}
 If($DeliveryNotificationOption.count -gt 0 ) { $sendMailParams.Add('DeliveryNotificationOption', $deliveryNotificationOption) }
 
-write-host("List all parameters")
-$sendMailParams.GetEnumerator() | Sort-Object -Property key
+#write-host("List all parameters")
+#$sendMailParams.GetEnumerator() | Sort-Object -Property key
 
-Send-MailMessage @sendMailParams
+Send-MailMessage -WarningAction SilentlyContinue @sendMailParams

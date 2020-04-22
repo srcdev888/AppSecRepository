@@ -68,33 +68,7 @@ sudo docker run -p 6080:8080 --name jenkins -v jenkins_home:/var/jenkins_home -v
 
   This post presents a quick way for having a running instance of Jenkins, but the recommendation is to create a Docker Image including the tooling (Maven, JDK) installation automatically.
 
-## Miscelleneous
 
-* Executing a command
-```bash
-sudo docker exec -it <container name> <command>  
-e,g., sudo docker exec -it jenkins /bin/bash
-```
-
-* List docker volumes
-```bash
- docker volume ls
-```
-
-* Inspect docker volume
-```bash
- docker volume inspect <volume_name>
-```
-
-* List container
-```bash
- docker container ls
-```
-
-* Inspect container
-```bash
- docker container inspect <container_name>
-```
 
 
 ## References
