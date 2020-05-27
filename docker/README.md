@@ -6,6 +6,7 @@
 
 ## DevOps Tooling
 * [Installing Jenkins container](jenkins/README.md)
+* [Installing bamboo container](bamboo/README.md)
 * [Powershell script mailer](psmailer/README.md)
 
 
@@ -17,6 +18,11 @@
 ```bash
 sudo docker exec -it <container name> <command>  
 e,g., sudo docker exec -it jenkins /bin/bash
+```
+
+* Executing a command as root
+```bash
+docker exec --user="root" -it bamboo-server /bin/bash
 ```
 
 * List docker volumes

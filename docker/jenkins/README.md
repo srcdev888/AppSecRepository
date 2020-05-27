@@ -70,6 +70,8 @@ sudo docker run -p 6080:8080 --name jenkins -v jenkins_home:/var/jenkins_home -v
 
 
 
+## Quick management script 
+[myjenkins.sh](myjenkins.sh)
 
 ## References
 Start Docker Containers Automatically [[1]]  
