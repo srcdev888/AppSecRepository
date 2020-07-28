@@ -8,11 +8,11 @@
 * [Installing Jenkins container](jenkins/README.md)
 * [Installing bamboo container](bamboo/README.md)
 * [Powershell script mailer](psmailer/README.md)
-
+* [Squid](squid/README.md)
 
 ***
 
-## Miscelleneous Docker commands
+## Docker commands
 
 * Executing a command
 ```bash
@@ -49,3 +49,4 @@ docker exec --user="root" -it bamboo-server /bin/bash
 ```bash
  docker run -it -v ~/container-data:/data mcr.microsoft.com/powershell /bin/bash
 ```
+## Docker compose commands
