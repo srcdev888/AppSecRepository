@@ -1,0 +1,10 @@
+[Unit]
+Description=Ngrok
+After=network.service
+
+[Service]
+Type=simple
+ExecStart=/snap/bin/ngrok start --all --config /root/.ngrok2/ngrok.yml
+
+[Install]
+WantedBy=multi-user.target

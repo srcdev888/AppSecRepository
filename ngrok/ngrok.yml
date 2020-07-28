@@ -1,0 +1,26 @@
+web_addr: 192.168.137.47:4040
+tunnels:
+
+    #  bamboo:
+#    proto: http
+#    addr: 8085
+#    host_header: localhost
+#    bind_tls: false
+
+  jenkins:
+    proto: http
+    addr: 6080
+    host_header: localhost
+    bind_tls: false
+
+  cxflow:
+    proto: http
+    addr: 8982
+    host_header: localhost
+    bind_tls: false
+
+  # Allow https
+  #cxflow:
+  # proto: http
+  # addr: 8982
+  # bind_tls: true
