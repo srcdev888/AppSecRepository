@@ -1,7 +1,7 @@
 # CxFlow with Jenkins and Jira
 
 * Author:   Pedric Kng  
-* Updated:  07 Aug 2020
+* Updated:  10 Aug 2020
 
 ## Overview
 This guide documents the CxFlow integration for;
