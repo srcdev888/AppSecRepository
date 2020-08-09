@@ -49,4 +49,11 @@ docker exec --user="root" -it bamboo-server /bin/bash
 ```bash
  docker run -it -v ~/container-data:/data mcr.microsoft.com/powershell /bin/bash
 ```
+
+* Update container
+```bash
+  docker update --restart=no <container_name>
+```
+
+
 ## Docker compose commands
