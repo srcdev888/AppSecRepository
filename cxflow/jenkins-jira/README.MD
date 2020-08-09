@@ -89,41 +89,41 @@ CxFlow can also support Jenkins declarative/scripted pipeline, and has flexibilt
       ```
     
     - Configurable command options
-      Command Option | Notes
-      ------ | ----------- | ------ | ---
-      f | File to be processed.  This the output from Checkmarx CLI, Jenkins/Bamboo Plugin, etc
-      app | Alternatively used for Tracking purposes.  This value is also stored in the body of the issue.
-      cx-project | Used to create the project in source/scan (zip) mode
-      cx-flow.filter-severity | The severity should be filtered during feedback (High, Medium, Low, Informational).  If no value is provided, all severity are applicable.
-      cx-flow.break-build | A non zero return code (10) is given when any of the filtering criteria is met within scan results.
-      checkmarx.base-url | Base FQDN and Port for CxSAST
-      checkmarx.username | CxSAST Service Account Username
-      checkmarx.password | CxSAST Service Account Password
-      checkmarx.team | Base team in Checkmarx to drive scanning and retrieving of results
-      checkmarx.scan-preset | The default preset used for the triggered scans
-      checkmarx.incremental | Enables support for Incremental scan support when CxFlow is triggering scans.
-      jira.url | Base FQDN and Port for Jira
-      jira.username | JIRA Service Account Username
-      jira.token | JIRA Service Account Token
-      jira.project | Jira project key
-      jira.issue-type | Jira issue type
-      jira.priorities.High | Mapping to Jira issue priority for CxSAST High severity level issue
-      jira.priorities.Medium | Mapping to Jira issue priority for CxSAST Medium severity level issue
-      jira.priorities.Low | Mapping to Jira issue priority for CxSAST Low severity level issue
-      jira.priorities.informational | Mapping to Jira issue priority for CxSAST Informational severity level issue
-      jira.open-transition | Jira transition to apply to an issue when re-opening an issue 
-      jira.close-transition | Jira transition to apply to an issue when closing an issue 
-      jira.open-status | List of status an issue can be in that indicate the issue is still in open state according to Jira
-      jira.closed-status | List of status an issue can be in that indicate the issue is still in closed state according to Jira
+      Command Option | Notes |
+      ------ | ----------- |
+      f | File to be processed.  This the output from Checkmarx CLI, Jenkins/Bamboo Plugin, etc |
+      app | Alternatively used for Tracking purposes.  This value is also stored in the body of the issue. |
+      cx-project | Used to create the project in source/scan (zip) mode |
+      cx-flow.filter-severity | The severity should be filtered during feedback (High, Medium, Low, Informational).  If no value is provided, all severity are applicable. |
+      cx-flow.break-build | A non zero return code (10) is given when any of the filtering criteria is met within scan results. |
+      checkmarx.base-url | Base FQDN and Port for CxSAST |
+      checkmarx.username | CxSAST Service Account Username |
+      checkmarx.password | CxSAST Service Account Password |
+      checkmarx.team | Base team in Checkmarx to drive scanning and retrieving of results |
+      checkmarx.scan-preset | The default preset used for the triggered scans |
+      checkmarx.incremental | Enables support for Incremental scan support when CxFlow is triggering scans. |
+      jira.url | Base FQDN and Port for Jira |
+      jira.username | JIRA Service Account Username |
+      jira.token | JIRA Service Account Token |
+      jira.project | Jira project key |
+      jira.issue-type | Jira issue type |
+      jira.priorities.High | Mapping to Jira issue priority for CxSAST High severity level issue |
+      jira.priorities.Medium | Mapping to Jira issue priority for CxSAST Medium severity level issue |
+      jira.priorities.Low | Mapping to Jira issue priority for CxSAST Low severity level issue |
+      jira.priorities.informational | Mapping to Jira issue priority for CxSAST Informational severity level issue |
+      jira.open-transition | Jira transition to apply to an issue when re-opening an issue |
+      jira.close-transition | Jira transition to apply to an issue when closing an issue |
+      jira.open-status | List of status an issue can be in that indicate the issue is still in open state according to Jira |
+      jira.closed-status | List of status an issue can be in that indicate the issue is still in closed state according to Jira |
 
-   Refer to Jira for;
-    - Issue Type
-      ![Jira Issue type](assets/Jira_IssueType.png)
-    - Issue status and workflow transition
-      ![Jira Issue workflow](assets/Jira_Workflow.png)
+      Refer to Jira for;
+      - Issue Type
+        ![Jira Issue type](assets/Jira_IssueType.png)
+      - Issue status and workflow transition
+        ![Jira Issue workflow](assets/Jira_Workflow.png)
 
 4. Execute Jenkins pipeline
-   ![CxFlow start](assets/Jenkins_Pipeline_CxFlow.png)
+   ![CxFlow start](assets/Jenkins_Pipeline_Cxflow.png)
   
 5. View Jira Issue
    ![Jira Issue](assets/Jira_Ticket.png)
