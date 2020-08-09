@@ -17,7 +17,7 @@ This repository documents several CxFlow [[2]] examples
 
 
 ## Examples
-* [CxFlow with Jenkins and Jira](jenkins-jira/README.md)
+* [CxFlow with Jenkins and Jira](jenkins-jira/README.MD)
 
 
 <!--
