@@ -72,15 +72,15 @@ CxFlow can also support Jenkins declarative/scripted pipeline, and has flexibilt
     --jira.username="$JIRA_USERNAME" \
     --jira.token="$JIRA_TOKEN" \
     --jira.project="<Jira project key>" \
-    --jira.issue-type="Bug" \
-    --jira.priorities.High="High" \
-    --jira.priorities.Medium="Medium" \
-    --jira.priorities.Low="Low" \
+    --jira.issue-type="Vulnerability" \
+    --jira.priorities.High="Highest" \
+    --jira.priorities.Medium="High" \
+    --jira.priorities.Low="Medium" \
     --jira.priorities.informational="Lowest" \
-    --jira.open-transition="In Progress" \
-    --jira.close-transition="Done" \
-    --jira.open-status="Backlog, Selected for Development, In Progress" \
-    --jira.closed-status="Done"
+    --jira.open-transition="To Do" \
+    --jira.close-transition="Closed" \
+    --jira.open-status="Open, In Progress, To Do, In Review, Review False Postive" \
+    --jira.closed-status="Closed"
     ```
 
     - Execute CxSAST scan via CxFlow Jar library
@@ -127,8 +127,6 @@ CxFlow can also support Jenkins declarative/scripted pipeline, and has flexibilt
   
 5. View Jira Issue
    ![Jira Issue](assets/Jira_Ticket.png)
-    
-   ![Jira Issue Board](assets/Jira_KanbanBoard.png)
   
 6. Break pipeline upon occurences of filtered issues by severity
    ![Fail Jenkins pipeline](assets/Jenkins_Pipeline_Start.png)
