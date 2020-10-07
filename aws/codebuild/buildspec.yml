@@ -1,0 +1,35 @@
+version: 0.2
+
+env:
+  variables:
+    CXSERVER: "https://7b9c3c8d.ngrok.io"
+    PROJECTNAME: "CxServer\\WebGoat-Legacy"
+    PRESET: "Checkmarx Default"
+    LOCATIONTYPE: "folder"
+  parameter-store:
+    CXTOKEN: "CXTOKEN"
+phases:
+  install:
+    runtime-versions:
+      java: corretto8
+    commands:
+      - echo Entering install phase...
+      - wget -O ~/cxcli.zip https://download.checkmarx.com/9.0.0/Plugins/CxConsolePlugin-2020.3.1.zip
+      - unzip ~/cxcli.zip -d ~/cxcli
+      - rm -rf ~/cxcli.zip
+      - chmod +x ~/cxcli/runCxConsole.sh
+  pre_build:
+    commands:
+      - echo Entering pre_build phases...
+      - ~/cxcli/runCxConsole.sh Scan -v -Projectname "${PROJECTNAME}" -CxServer "${CXSERVER}" -CxToken "${CXTOKEN}" -LocationType "${LOCATIONTYPE}" -LocationPath "${CODEBUILD_SRC_DIR}" -Preset "${PRESET}"
+    finally:
+      - cd $CODEBUILD_SRC_DIR
+  build:
+    commands:
+      - echo Entering build phase...
+      - echo Build started on `date`
+      - mvn package
+  post_build:
+    commands:
+      - echo Entering post_build phase...
+      - echo Build completed on `date`i

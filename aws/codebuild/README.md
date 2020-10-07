@@ -8,6 +8,11 @@ In the build process, a container is spinned up where the source code is copied 
 
 For discussion sake, this tutorial will be only cover Asynchronous CxSAST Scan; pipeline do not wait for scan completion. Synchronous scan, open source library scan and result handling e.g., fail on exceeded threshold, download result report can be customized using this example.
 
+## Table of contents
+* [Adding CxSAST within AWS CodeBuild using the console wizard](#Adding-CxSAST-within-AWS-CodeBuild-using-the-console-wizard)
+* [Testing and debugging AWS CodeBuild locally](#Testing-and-debugging-AWS-CodeBuild-locally)
+
+
 ***
 
 ## Adding CxSAST within AWS CodeBuild using the console wizard
@@ -27,7 +32,7 @@ For the CodeBuild service role, do note to grant the equivalent allowed permissi
 
 ![Service allowed permissions policies](assets/CodeBuild-createBuildProj03.png)
 
-**Step3** : Add the buildspec.yml file to the root directory of your source code.
+**Step3** : Add the [buildspec.yml](buildspec.yml) file to the root directory of your source code.
 
 ```yaml
 version: 0.2
@@ -42,17 +47,18 @@ env:
     CXTOKEN: "CXTOKEN"
 phases:
   install:
+    runtime-versions:
+      java: corretto8
     commands:
       - echo Entering install phase...
-      - apt-get install unzip
-      - curl -LOk https://download.checkmarx.com/8.8.0/Plugins/CxConsolePlugin-8.80.0.zip
-      - unzip CxConsolePlugin-8.80.0.zip -d /opt/
-      - rm CxConsolePlugin-8.80.0.zip
-      - chmod a+x /opt/CxConsolePlugin-8.80.0
+      - wget -O ~/cxcli.zip https://download.checkmarx.com/9.0.0/Plugins/CxConsolePlugin-2020.3.1.zip
+      - unzip ~/cxcli.zip -d ~/cxcli
+      - rm -rf ~/cxcli.zip
+      - chmod +x ~/cxcli/runCxConsole.sh
   pre_build:
     commands:
       - echo Entering pre_build phases...
-      - bash /opt/CxConsolePlugin-8.80.0/runCxConsole.sh AsyncScan -v -Projectname "${PROJECTNAME}" -CxServer "${CXSERVER}" -CxToken "${CXTOKEN}" -LocationType "${LOCATIONTYPE}" -LocationPath "${CODEBUILD_SRC_DIR}" -Preset "${PRESET}" -enableOsa
+      - ~/cxcli/runCxConsole.sh Scan -v -Projectname "${PROJECTNAME}" -CxServer "${CXSERVER}" -CxToken "${CXTOKEN}" -LocationType "${LOCATIONTYPE}" -LocationPath "${CODEBUILD_SRC_DIR}" -Preset "${PRESET}"
     finally:
       - cd $CODEBUILD_SRC_DIR
   build:
@@ -113,11 +119,85 @@ PRE_BUILD Stage
 _IN WORKS_
 -->
 
+## Testing and debugging AWS CodeBuild locally
+AWS supports testing and debugging CodeBuild locally [[5]], the following section will illustrate how to deploy the previous section CodeBuild integration locally
+
+**Step 1** : Build the aws code build image [[6]], in this tutorial, we will be using [amazonlinux2-x86_64-standard:3.0](https://github.com/aws/aws-codebuild-docker-images/blob/master/al2/x86_64/standard/3.0)
+```bash
+git clone https://github.com/aws/aws-codebuild-docker-images.git
+cd aws-codebuild-docker-images/al2/x86_64/standard/3.0
+docker build -t aws/codebuild/amazonlinux2-x86_64-standard:3.0 .
+```
+
+**Step 2** : Pull the CodeBuild local agent(this is invoked in the script in Step 3).
+
+```bash
+docker pull amazon/aws-codebuild-local:latest --disable-content-trust=false
+```
+
+**Step 3** : Download and use the [codebuild_build.sh](https://raw.githubusercontent.com/aws/aws-codebuild-docker-images/master/local_builds/codebuild_build.sh) script to run your local builds.
+
+```bash
+wget https://raw.githubusercontent.com/aws/aws-codebuild-docker-images/master/local_builds/codebuild_build.sh
+chmod +x codebuild_build.sh
+```
+
+**Step 4** : Clone your project repository. In this example, we are going to use the modified [WebGoat-Legacy project](https://github.com/cx-demo/WebGoat-Legacy)
+```bash
+git clone https://github.com/cx-demo/WebGoat-Legacy.git
+git checkout Feature-awscodebuild
+```
+
+**Step 5**: Use the local agent to build the sample project
+
+```bash
+mkdir -p environment/artifacts
+./codebuild_build.sh -i aws/codebuild/amazonlinux2-x86_64-standard:3.0 -a ./environment/artifacts -s /Webgoat-Legacy
+```
+
+Refer to [AWS Local Build Options](https://github.com/aws/aws-codebuild-docker-images/tree/master/local_builds)
+```bash
+usage: codebuild_build.sh [-i image_name] [-a artifact_output_directory] [options]
+```
+
+*Required:*
+
+-i    Used to specify the customer build container image.
+
+-a   Used to specify an artifact output directory.
+
+*Optional:*
+
+-s    Used to specify a source directory. Defaults to the current working directory.
+
+-c    Use the AWS configuration and credentials from your local host. This includes ~/.aws and any AWS_* environment variables.
+
+-b    Used to specify a buildspec override file. Defaults to buildspec.yml in the source directory.
+
+-e    Used to specify a file containing environment variables.
+
+*Environment variable file format:*
+- Expects each line to be in VAR=VAL format
+- Lines beginning with # are processed as comments and ignored
+- Blank lines are ignored
+- File can be of type .env or .txt
+- There is no special handling of quotation marks, meaning they will be part of the VAL
+
+
+
 ## References
 Build Specification Reference for AWS CodeBuild [[1]]  
 Environment Variables in AWS CodeBuild [[2]]  
 Authentication / Login to the CxSAST/CxOSA CLI [[3]]  
+Test and debug locally with the AWS CodeBuild agent [[4]]  
+Announcing local build support for aws codebuild [[5]]  
+AWS CodeBuild Docker Images [[6]]  
+Docker images provided by CodeBuild [[7]]
 
 [1]:https://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html#build-spec-ref-syntax "Build Specification Reference for AWS CodeBuild"  
 [2]:https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-env-vars.html "Environment Variables in CodeBuild"  
 [3]:https://checkmarx.atlassian.net/wiki/spaces/KC/pages/222232891/Authentication+Login+to+the+CxSAST+CxOSA+CLI "Authentication / Login to the CxSAST/CxOSA CLI"
+[4]:https://docs.aws.amazon.com/codebuild/latest/userguide/use-codebuild-agent.html "Test and debug locally with the AWS CodeBuild agent"
+[5]:https://aws.amazon.com/blogs/devops/announcing-local-build-support-for-aws-codebuild/ "Announcing local build support for aws codebuild"
+[6]:https://github.com/aws/aws-codebuild-docker-images "AWS CodeBuild Docker Images"
+[7]: https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-available.html "Docker images provided by CodeBuild"
