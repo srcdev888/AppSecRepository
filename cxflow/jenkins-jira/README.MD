@@ -121,6 +121,7 @@ CxFlow can also support Jenkins declarative/scripted pipeline, and has flexibilt
         ![Jira Issue type](assets/Jira_IssueType.png)
       - Issue status and workflow transition
         ![Jira Issue workflow](assets/Jira_Workflow.png)
+        ![Jira Issue workflow](assets/Jira_KanbanBoard.png)
 
 4. Execute Jenkins pipeline
    ![CxFlow start](assets/Jenkins_Pipeline_Cxflow.png)
