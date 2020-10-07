@@ -1,6 +1,6 @@
 # Checkmarx CxSAST integration with AWS CodeBuild
 * Author:   Pedric Kng  
-* Updated:  17 Nov 2018
+* Updated:  07 Oct 2020
 
 AWS CodeBuild offers integration through a declared build specification 'buildspec.yml' [[1]] to specify various build phases and artifacts storage.
 

@@ -13,3 +13,5 @@
 /mybatis-test/mybatis-test.log
 /tfs/Bug.xml
 /cxxml/*.xml
+
+.vscode/**
