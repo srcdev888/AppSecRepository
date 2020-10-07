@@ -1,6 +1,6 @@
 # CxFlow Examples
 * Author:   Pedric Kng  
-* Updated:  22 Jun 2020
+* Updated:  07 Oct 2020
 
 This repository documents several CxFlow [[2]] examples
 
@@ -18,7 +18,7 @@ This repository documents several CxFlow [[2]] examples
 
 ## Examples
 * [CxFlow with Jenkins and Jira](jenkins-jira/README.MD)
-
+* [CxFlow with Github Actions](githubactions/README.MD)
 
 <!--
 ## Gitlab Examples
