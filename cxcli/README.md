@@ -130,5 +130,7 @@ sh ./cxcli/runCxConsole.sh scan -v -cxserver "$cxserver" -cxtoken "$cxtoken" -pr
 
 ## References
 Bamboo configuring a builder task [[1]]  
+Cloning Bitbucket cloud with OAuth token [[2]]
 
 [1]:https://confluence.atlassian.com/bamboo/script-289277046.html "Bamboo configuring a builder task"
+[2]:https://community.atlassian.com/t5/Bitbucket-questions/hot-to-git-clone-with-oauth-how-to-create-token-for-this-kind-of/qaq-p/686446 "Cloning Bitbucket cloud with OAuth token"
