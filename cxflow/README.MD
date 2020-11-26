@@ -19,6 +19,7 @@ This repository documents several CxFlow [[2]] examples
 ## Examples
 * [CxFlow with Jenkins and Jira](jenkins-jira/README.MD)
 * [CxFlow with Github Actions](githubactions/README.MD)
+* [CxFlow with CircleCI Orb](circleci/README.MD)
 
 <!--
 ## Gitlab Examples
