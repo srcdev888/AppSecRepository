@@ -1,8 +1,6 @@
-*In-works
-
 # CxFlow with CircleCI
 * Author:   Pedric Kng  
-* Updated:  20 Oct 2020
+* Updated:  26 Oct 2020
 
 ## Overview
 Cxflow Circle CI Orb offers integration into the pipeline to execute Checkmarx security scans (CxSAST) or to retrieve existing scan results

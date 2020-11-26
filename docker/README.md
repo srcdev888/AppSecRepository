@@ -52,7 +52,22 @@ docker exec --user="root" -it bamboo-server /bin/bash
 
 * Update container
 ```bash
-  docker update --restart=no <container_name>
+ docker update --restart=no <container_name>
+```
+
+* Run container with name
+```bash
+ docker run -d --name <container name> <container repo:tag>
+```
+
+* Run container with cleanup
+```bash
+ docker run --rm -it <container repo:tag>
+```
+
+* Build container image
+```bash
+ docker build -t <username/container:tag>
 ```
 
 
