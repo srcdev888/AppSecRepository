@@ -53,9 +53,20 @@ Check if ngrok service is up
 sudo systemctl status ngrok
 ```
 
+Check ngrok service version
+```bash
+ngrok --version
+```
+
+Inspecting the traffic through tunnel
+```bash
+ngrok http 8080
+```
+
+
 ## Extract the tunnel url
 
-1. Browse to http%3A%2F%2Flocalhost%3A4040 for the ngrok console.
+1. Browse to http:\\localhost:4040 for the ngrok console.
 
 2. Query via ngrok rest api
 
@@ -65,5 +76,7 @@ curl http://192.168.137.47:4040/api/tunnels
 
 ## References
 Install ngrok using snap [[1]]  
+How to Get Public IP Address by Using Ngrok or SSH Tunneling [[2]]  
 
 [1]:https://snapcraft.io/install/ngrok/ubuntu "Install ngrok using snap"
+[2]:https://linuxhint.com/public_ip_address_ngrok_ssh_tunneling "How to Get Public IP Address by Using Ngrok or SSH Tunneling"
