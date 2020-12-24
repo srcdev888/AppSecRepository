@@ -17,7 +17,7 @@ Jenkins Pipeline supports docker integration, a key proposition is in reducing t
 
 1. Create Jenkins project of type 'Pipeline'
 
-    ![New pipeline project](assets\New-pipeline-project.png)
+    ![New pipeline project](assets/New-pipeline-project.png)
 
 2. Setup the following pipeline parameters
 
@@ -30,7 +30,7 @@ Jenkins Pipeline supports docker integration, a key proposition is in reducing t
 
     These parameters will be used in the CxCLI [[7]] arguments to execute CxSAST & CxOSA scans
 
-    ![Pipeline parameters](assets\Pipeline-parameters.png)
+    ![Pipeline parameters](assets/Pipeline-parameters.png)
 
 3. Configure the [Pipeline script] (Jenkinsfile)
 
@@ -96,7 +96,7 @@ Jenkins Pipeline supports docker integration, a key proposition is in reducing t
 
     You can find more details from Jenkins Dashboard > Pipeline > [Project Name] > Pipeline Syntax > Global Variable Reference
 
-    ![Global Variable Reference](assets\Global-Variable-Reference.png)
+    ![Global Variable Reference](assets/Global-Variable-Reference.png)
 
 # References
 Using Docker with Pipeline [[1]]  
