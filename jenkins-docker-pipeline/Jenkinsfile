@@ -1,0 +1,61 @@
+node {
+    
+    parameters {
+      // Source code repository
+      string(name: 'GIT_PROJECT_URL', defaultValue: 'https://github.com/WebGoat/WebGoat-Legacy.git', description: 'Git Repository')
+      // Checkmarx server URL
+      string(name: 'CX_SERVER_URL', defaultValue: 'http://192.168.137.50', description: 'CxSAST Server URL Team')
+      // Checkmarx project team is hardcoded to CxServer
+      string(name: 'CX_TEAM', defaultValue: 'CxServer', description: 'CxSAST Project Team e.g.,CxServer\\SP\\Corp ')
+      // Checkmarx project name
+      string(name: 'CX_PROJECT_NAME', defaultValue: 'WebGoat-Legacy', description: 'CxSAST Project Name')
+      // Checkmarx CxCLI Token
+      string(name: 'CX_TOKEN', defaultValue: 'a750bccb1d176a137e0287152e6fe1c971242270f8888f56bcea09ddfd525059', description: 'CxCLI Token')
+
+    }
+    
+    sh 'echo "Get some code from an SCM"'
+    checkout([$class: 'GitSCM',
+      branches: [[name: '*/master']],
+      doGenerateSubmoduleConfigurations: false,
+      extensions: [],
+      submoduleCfg: [],
+      userRemoteConfigs: [[url: "${params.GIT_PROJECT_URL}"]]])
+    
+    //stash 'code'
+    
+    def test = [:]
+    
+    //sh 'echo workspace $WORKSPACE'
+    
+    /*
+    stage('Example') {
+        if (env.BRANCH_NAME == 'master') {
+            echo 'I only execute on the master branch'
+        } else {
+            echo 'I execute elsewhere'
+        }
+    }
+    */
+    
+    test["Unit Test"] = {
+        stage('Resolve dependency') {
+            docker.image('mcr.microsoft.com/dotnet/sdk:3.1').inside('-u root:sudo') {
+                sh 'dotnet --info'
+                sh 'dotnet restore -v n --force-evaluate --use-lock-file'
+            }            
+        }
+    
+    }
+    
+    test["Security Test"] = {
+        stage('CxDockerCLI') {
+            docker.image('cxdockercli/dotnet:2020.4.4').inside("-u root:sudo --entrypoint ''") {
+                sh "/opt/cxcli/runCxConsole.sh Scan -v -CxServer ${params.CX_SERVER_URL} -CxToken ${params.CX_TOKEN} -ProjectName '${CX_TEAM}\\${CX_PROJECT_NAME}' -LocationType folder -LocationPath ${WORKSPACE} -enableosa -executepackagedependency"
+            }
+        }    
+    }
+    
+    parallel test
+    
+}

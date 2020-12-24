@@ -1,8 +1,10 @@
-# Installing Jenkins container
+# Running Jenkins container
 * Author:   Pedric Kng  
-* Updated:  19 Feb 2020
+* Updated:  24 Dec 2020
 
-Guide on installing Jenkins container with Java JDK and Maven tooling
+This is a basic guide on running Jenkins container with Java JDK and Maven tooling
+
+If you are interested in installing Jenkins container with Checkmarx plugin, refer to Jenkins container including Checkmarx plugin [[4]].
 
 ***
 ## Installation
@@ -66,8 +68,9 @@ sudo docker run -p 6080:8080 --name jenkins -v jenkins_home:/var/jenkins_home -v
 
 6. Remarks
 
-  This post presents a quick way for having a running instance of Jenkins, but the recommendation is to create a Docker Image including the tooling (Maven, JDK) installation automatically.
+  This post presents a quick way for having a running instance of Jenkins, but the recommendation is to leverage on Jenkins Jenkins docker pipeline where different tooling are self-contained within a container environment.  
 
+  See example of Jenkins docker pipeline with CxCLI plugin [[5]]
 
 
 ## Quick management script 
@@ -77,7 +80,11 @@ sudo docker run -p 6080:8080 --name jenkins -v jenkins_home:/var/jenkins_home -v
 Start Docker Containers Automatically [[1]]  
 Start containers automatically [[2]]  
 Setup Jenkins CI in 30 Minutes [[3]]  
+Jenkins container including Checkmarx plugin [[4]]  
+Jenkins docker pipeline with CxCLI plugin [[5]]  
 
 [1]:https://mehmandarov.com/start-docker-containers-automatically/ "Start Docker Containers Automatically"
 [2]:https://docs.docker.com/config/containers/start-containers-automatically/ "Start containers automatically"
 [3]:https://mydeveloperplanet.com/2019/01/30/setup-jenkins-ci-in-30-minutes/ "Setup Jenkins CI in 30 Minutes"
+[4]:https://github.com/cx-demo/myjenkins.git "Jenkins container including Checkmarx plugin" 
+[5]:https://github.com/cx-demo/MyAppSecRepository/jenkins-docker-pipeline "Jenkins docker pipeline with CxCLI plugin"
