@@ -2,7 +2,7 @@
 * Author:   Pedric Kng  
 * Updated:  06 Jan 2021
 
-This exercise [AccountDao.cs](SQLi/AccountDao.cs) illustrates 4 scenarios using CxAudit quick add functionality;
+This exercise [AccountDao.cs](AccountDao.cs) illustrates 4 scenarios using CxAudit quick add functionality;
 1. Parameters not sanitized leading to a SQL injection
 2. Parameters are sanitized using prepared statements
 3. Sanitization method not recognized not CxSAST; add to sanitizers
