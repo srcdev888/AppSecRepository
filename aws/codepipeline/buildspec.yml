@@ -1,0 +1,41 @@
+version: 0.2
+
+env:
+  variables:
+    SAST_SERVER: "http://c80df6936115.ngrok.io" 
+    SAST_TEAM: "CxServer\\Github\\cx-demo"
+    SAST_PROJECT_NAME: "NodeGoat@AWS"
+    SAST_PRESET: "High and Medium"
+    SAST_HIGH: "9"
+    SAST_MEDIUM: "99"
+    SAST_LOW: "999"
+    SCA_HIGH: "9"
+    SCA_MEDIUM: "99"
+    SCA_LOW: "999"
+    IAST_SERVER: "http://055e8992f7bd.ngrok.io"
+  parameter-store:
+    SAST_TOKEN: "/SAST/TOKEN"
+    SCA_ACCOUNT: "/SCA/ACCOUNT"
+    SCA_USERNAME: "/SCA/USERNAME"
+    SCA_PASSWORD: "/SCA/PASSWORD"
+phases: 
+  install: 
+    runtime-versions: 
+      nodejs: latest
+    commands:
+      - echo Download Cx CLI
+      - wget -O ~/cxcli.zip https://download.checkmarx.com/9.0.0/Plugins/CxConsolePlugin-2020.3.1.zip
+      - unzip ~/cxcli.zip -d ~/cxcli 
+      - rm -rf ~/cxcli.zip 
+      - chmod +x ~/cxcli/runCxConsole.sh
+  pre_build:
+    commands:
+      - echo No pre-build stage
+  build:
+    commands:
+      - echo Building NodeGoat Project 
+      - cd $CODEBUILD_SRC_DIR
+      - npm install "$IAST_SERVER/iast/compilation/download/NODE_JS"
+  post_build: 
+    commands: 
+      - ~/cxcli/runCxConsole.sh Scan -verbose -CxServer $SAST_SERVER -CxToken $SAST_TOKEN -ProjectName "$SAST_TEAM\\$SAST_PROJECT_NAME" -preset "$SAST_PRESET" -LocationType folder -LocationPath "$CODEBUILD_SRC_DIR" -SASTHigh $SAST_HIGH -SASTMedium $SAST_MEDIUM -SASTLow $SAST_LOW -enableSca -scaAccount $SCA_ACCOUNT -scaUsername $SCA_USERNAME -scaPassword $SCA_PASSWORD scahigh $SCA_HIGH -scamedium $SCA_MEDIUM -scalow $SCA_LOW

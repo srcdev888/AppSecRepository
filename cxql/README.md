@@ -5,7 +5,7 @@
 The exercises highlighted here are for the sake of capability demonstration and can be rewritten or further refined for optimization e.g., using atomic queries.
 
 ## Basic Exercises
-* [Quick elimination of SQL Injection using CxAudit UI](#Quick-elimination-of-SQL-Injection-using-CxAudit-UI)
+* [Quick elimination of SQL Injection using CxAudit UI](SQLi/README.md)
 * [Finding sources and sinks](#Finding-sources-and-sinks)
 * [Building flows](#Building-flows)
 * [Adding proprietary sanitizers](#Adding-proprietary-sanitizers)
@@ -18,12 +18,8 @@ The exercises highlighted here are for the sake of capability demonstration and 
 
 ***
 ## Basic Exercises
-### Quick elimination of SQL Injection using CxAudit UI
-This exercise [AccountDao.cs](SQLi/AccountDao.cs) illustrates 4 scenarios using CxAudit quick add functionality;
-1. Parameters not sanitized leading to a SQL injection
-2. Parameters are sanitized using prepared statements
-3. Sanitization method not recognized not CxSAST; add to sanitizers
-4. Interactive input not detected; add to interactive inputs
+
+***
 
 ### Finding sources and sinks
 This exercise consists of 3 parts based on [1.cs](basic/Exercise-1/1.cs);
@@ -45,6 +41,7 @@ CxList blocks = All.GetBlocksOfIfStatements(true);
 result = nodesNamedInput.GetByAncs(blocks);
 ```
 
+***
 ### Building flows
 This exercise consists of 2 parts based on [2.cs](basic/Exercise-2/2.cs);
 
@@ -65,7 +62,7 @@ CxList methodDecl = All.FindDefinition(memberAccess);
 CxList sink2 = All.GetParameters(methodDecl);
 result = input.DataInfluencingOn(sink2); //GetSpeed
 ```
-
+***
 ### Adding proprietary sanitizers
 This exercise consists of 3 parts based on [3.cs](basic/Exercise-3/3.cs);
 1. Find flow from the input to the sink.
