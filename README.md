@@ -29,7 +29,7 @@ Purpose:  This repository documents my learning for Application Security: Checkm
 * [Parsing Results in CxXML Report](cxxml/README.md)
 
 # Miscellaneous
-* [Cloning machines on HyperV](hyperv/README.md)
+* [HyperV Tutorial](hyperv/README.md)
 * [Checkmarx services script](powershell/services/README.md)
 * [Create Active Directory Labs with Powershell](powershell/lab)
 * [Installing MS SQL 2017 on Ubuntu 18.04.3](linux/README-MSSQL.md)
