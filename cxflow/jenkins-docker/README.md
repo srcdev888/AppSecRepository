@@ -129,7 +129,7 @@ This guide illustrates dockerized cxflow integration for
     We configure CxFlow to filter for only new findings ['cx-flow.filter-status'](#L86) which will break the pipeline based on the ['cx-flow.break-build'](#L87) configuration. Refer to [[8]] for other filtering options.
 
     - Download XML report  
-    We configure the bug tracker to be XML via ['CX_FLOW_BUG_TRACKER'](#L68) whereby the report will be downloaded and persisted in the workspace, see ['checkmarx.preserve-xml'](#L88), ['cx-xml.file-name.format'](#L89) and ['cx-xml.data-folder'](#L90). Refer to [6] for other bug tracker integration
+    We configure the bug tracker to be XML via ['CX_FLOW_BUG_TRACKER'](#L68) whereby the report will be downloaded and persisted in the workspace, see ['checkmarx.preserve-xml'](#L88), ['cx-xml.file-name.format'](#L89) and ['cx-xml.data-folder'](#L90). Refer to [[6]] for other bug tracker integration
 
 
 3. Upon execution scan, the first scan will reflect 'failed' as per policy - new vulnerabilities discovered; an error code 10 will be thrown. 
