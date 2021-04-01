@@ -1,0 +1,64 @@
+node {
+    
+    properties([
+        parameters([
+            // Checkmarx project name
+            string(name: 'CI_PROJECT_NAME', defaultValue: 'service-discovery-demo-parent', description: 'CxSAST Project Name'),
+            // Source code repository
+            string(name: 'CI_PROJECT_URL', defaultValue: 'https://github.com/yevgenykuz/service-discovery-demo-parent.git', description: 'Git Repository'),
+            // Commit reference
+            string(name: 'CI_COMMIT_REF_NAME', defaultValue: 'mycommit', description: 'Commit reference'),
+            // Commit branch
+            string(name: 'CI_COMMIT_BRANCH', defaultValue: 'master', description: 'Branch'),
+    
+            // Checkmarx server URL
+            string(name: 'CHECKMARX_BASE_URL', defaultValue: 'https://<mycxsast>', description: 'CxSAST Server URL'),
+            // Checkmarx project team is hardcoded to CxServer
+            string(name: 'CX_TEAM', defaultValue: '/CxServer', description: 'CxSAST Project Team e.g.,/CxServer/SP/Corp'),
+    
+        //Checkmarx username
+        string(name: 'CHECKMARX_USERNAME', defaultValue: 'administrator', description: 'Cx username'),
+        //Checkmarx password
+        string(name: 'CHECKMARX_PASSWORD', defaultValue: '<password>', description: 'Cx password'),
+        //CxSAST scan preset
+        string(name: 'CHECKMARX_SCAN_PRESET', defaultValue: 'Checkmarx Default', description: 'Scan preset'),
+        ])
+    ])
+    
+    sh 'echo "Get some code from an SCM"'
+    checkout([$class: 'GitSCM',
+    branches: [[name: "refs/heads/${params.CI_COMMIT_BRANCH}"]],
+    doGenerateSubmoduleConfigurations: false,
+    extensions: [],
+    submoduleCfg: [],
+    userRemoteConfigs: [[credentialsId: 'Gitlab', url: "${params.CI_PROJECT_URL}"]]
+    ])
+    
+    withEnv(['CX_FLOW_BUG_TRACKER=CxXml',
+            'CX_FLOW_BUG_TRACKER_IMPL=CxXml,Json', 
+            "CX_PROJECT=${CI_PROJECT_NAME}-${CI_COMMIT_REF_NAME}"]) {
+        stage('test') {
+            docker.image('checkmarx/cx-flow').inside("--entrypoint ''") {
+                sh 'printenv'
+                sh '''
+                    java -Xms512m -Xmx1024m -Djavax.net.debug=ssl,handshake \
+                        -Djava.security.egd='file:/dev/./urandom' \
+                        -jar /app/cx-flow.jar \
+                        --scan \
+                        --app=${CI_PROJECT_NAME} \
+                        --branch=${CI_COMMIT_BRANCH} \
+                        --cx-team=${CX_TEAM} \
+                        --cx-project=${CX_PROJECT} \
+                        --spring.profiles.active="sast" \
+                        --f="." \
+                        --cx-flow.zip-e[]xclude="dotnet-core-apps/.*,nodejs-apps/.*" \
+                        --cx-flow.filter-status=New \
+                        --cx-flow.break-build=true \
+                        --checkmarx.preserve-xml=true \
+                        --cx-xml.file-name-format="[PROJECT]-[BRANCH]-[TIME].xml" \
+                        --cx-xml.data-folder= ${WORKSPACE}
+                '''
+            }            
+        }  
+    }
+}
