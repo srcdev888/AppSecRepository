@@ -117,26 +117,26 @@ This guide illustrates dockerized cxflow integration for
     There are 2 stages within this pipeline, namely to pull source code from the git repository and execute CxSAST scan using Dockerized CxFlow. In this tutorial, we will focus on the latter and pin point several aspects;
 
     - CxFlow CLI execution  
-    We execute CxFlow in [CLI execution mode](#L75-90). Refer to [[9]] for more information on the different use cases.
+    We execute CxFlow in [CLI execution mode](Jenkinsfile#L44-59). Refer to [[9]] for more information on the different use cases.
     
     - CxFlow Scan configuration  
-    The various scan configuration are passed in via [environment and parameter variables](#L78-84) as configured, source code to be scanned is retrieved from the workspace ['--f'](#L84).   Refer to [[5]] for the configuration details
+    The various scan configuration are passed in via [environment and parameter variables](Jenkinsfile#L47-53) as configured, source code to be scanned is retrieved from the workspace ['--f'](Jenkinsfile#L53).   Refer to [[5]] for the configuration details
 
     - Zip Exclude  
-    We excluded some folders to reduce the zip uploaded to CxSAST via the ['cx-flow.zip-exclude'](#L85)
+    We excluded some folders to reduce the zip uploaded to CxSAST via the ['cx-flow.zip-exclude'](Jenkinsfile#L54)
 
     - Filter and break build  
-    We configure CxFlow to filter for only new findings ['cx-flow.filter-status'](#L86) which will break the pipeline based on the ['cx-flow.break-build'](#L87) configuration. Refer to [[8]] for other filtering options.
+    We configure CxFlow to filter for only new findings ['cx-flow.filter-status'](Jenkinsfile#L55) which will break the pipeline based on the ['cx-flow.break-build'](Jenkinsfile#L56) configuration. Refer to [[8]] for other filtering options.
 
     - Download XML report  
-    We configure the bug tracker to be XML via ['CX_FLOW_BUG_TRACKER'](#L68) whereby the report will be downloaded and persisted in the workspace, see ['checkmarx.preserve-xml'](#L88), ['cx-xml.file-name.format'](#L89) and ['cx-xml.data-folder'](#L90). Refer to [[6]] for other bug tracker integration
+    We configure the bug tracker to be XML via ['CX_FLOW_BUG_TRACKER'](Jenkinsfile#L37) whereby the report will be downloaded and persisted in the workspace, see ['checkmarx.preserve-xml'](Jenkinsfile#L57), ['cx-xml.file-name.format'](Jenkinsfile#L58) and ['cx-xml.data-folder'](Jenkinsfile#L59). Refer to [[6]] for other bug tracker integration
 
 
 3. Upon execution scan, the first scan will reflect 'failed' as per policy - new vulnerabilities discovered; an error code 10 will be thrown. 
 
     ![Failed upon new vulnerabilities](assets/Failed_new_vulnerabilities.png)
 
-    Subsquent scan will not reflect other 'failed' as no vulnerabilities is detected.
+    Subsequent scan will not reflect 'failed' as no new vulnerabilities is detected.
 
 ## References
 Jenkins CI service [[1]]  

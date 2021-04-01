@@ -51,7 +51,7 @@ node {
                         --cx-project=${CX_PROJECT} \
                         --spring.profiles.active="sast" \
                         --f="." \
-                        --cx-flow.zip-e[]xclude="dotnet-core-apps/.*,nodejs-apps/.*" \
+                        --cx-flow.zip-exclude="dotnet-core-apps/.*,nodejs-apps/.*" \
                         --cx-flow.filter-status=New \
                         --cx-flow.break-build=true \
                         --checkmarx.preserve-xml=true \
