@@ -1,8 +1,8 @@
-# Quick guide on cryptographic keys utilities
+# Quick guide on Java Keytool
 
 * Author:   Pedric Kng
 * Updated:  28-May-21
-* Purpose:  This article describes capabilities with Java keytool 
+* Purpose:  This article is a quick guide with Java keytool 
 
 # Abbreviations
 | Label | Description |  
@@ -21,6 +21,7 @@
 * [Generate certificate signing request(csr)](#Generate-certificate-signing-request(csr))
 * [Print certificate signing request(csr)](#Print-certificate-signing-request(csr))
 * [Import certificate signing reply(p7b) or X509 certificate(cer)](#Import-certificate-signing-reply(p7b)-or-X509-certificate(cer))
+* [Change key alias](#Change-key-alias)
 
 ## Generate Self-signed Subject Alternate Name(SAN) Certificate
 
@@ -92,6 +93,17 @@ keytool -importcert ^
 ```
 
 Specify '-trustcacerts' and keytool will attempt to construct chain of command using cacerts keystore installed with JRE.
+
+## Change key alias
+```bash
+keytool -changealias ^
+    -alias "current-alias" ^
+    -destalias "new-alias" ^
+    -keypass "keypass" ^
+    -keystore "server.jks" ^
+    -storepass "mysecret"
+```
+
 
 # References
 Simple way to generate a Subject Alternate Name (SAN) certificate [[1]]  
