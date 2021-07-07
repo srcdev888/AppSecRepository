@@ -70,5 +70,14 @@ docker exec --user="root" -it bamboo-server /bin/bash
  docker build -t <username/container:tag>
 ```
 
+## Dockerhub 
+* Pushing image to Dockerhub registry
+```bash
+
+# tag
+docker image tag <local_image>:<tag> <repo>/<remote_image>:<tag>
+docker image push <repo>/<remote_image>:<tag>
+
+```
 
 ## Docker compose commands
