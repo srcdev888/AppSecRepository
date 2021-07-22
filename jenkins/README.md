@@ -5,7 +5,7 @@
 
 ## Clean Up Old Builds
 
-You can update the configuration of all existing jobs on a Jenkins Master by running the following Groovy Script within Manage Jenkins -> Script Console which will apply a permanent build discard policy to your jobs that you can configure by passing the desired values to the listed parameters.
+You can update the configuration of all existing jobs on a Jenkins Master by running the following Groovy Script within Manage Jenkins -> Manage Nodes and Clouds -> [Select Node] -> Script Console which will apply a permanent build discard policy to your jobs that you can configure by passing the desired values to the listed parameters.
 
 ```groovy
 // NOTES:
@@ -42,7 +42,27 @@ Jenkins.instanceOrNull.allItems(hudson.model.Job).each { job ->
 return;
 ```
 
+
+```groovy
+import jenkins.model.Jenkins
+import hudson.model.Job
+
+MAX_BUILDS = 5
+Jenkins.instance.getAllItems(Job.class).each { job ->
+  println job.name
+  def recent = job.builds.limit(MAX_BUILDS)
+  for (build in job.builds) {
+    if (!recent.contains(build)) {
+      println "Preparing to delete: " + build
+      build.delete()
+    }
+  }
+}
+```
+
 # References
 Best Strategy for Disk Space Management: Clean Up Old Builds [[1]]  
+Jenkins-script-console-scripts [[2]]  
 
 [1]:https://support.cloudbees.com/hc/en-us/articles/215549798-Best-Strategy-for-Disk-Space-Management-Clean-Up-Old-Builds "Best Strategy for Disk Space Management: Clean Up Old Builds"
+[2]:https://github.com/samrocketman/jenkins-script-console-scripts "Jenkins-script-console-scripts"

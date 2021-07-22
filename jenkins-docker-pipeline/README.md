@@ -98,6 +98,16 @@ Jenkins Pipeline supports docker integration, a key proposition is in reducing t
 
     ![Global Variable Reference](assets/Global-Variable-Reference.png)
 
+## Miscellaneous
+- Permission denied connecting to the Docker Daemon socket
+
+    ```bash
+    # Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Post http://%2Fvar%2Frun%2Fdocker.sock/v1.39/images/create?fromImage=webgoat%2Fwebgoat-8.0&tag=v8.0.0.M21: dial unix /var/run/docker.sock: connect: permission denied
+
+    sudo chmod 666 /var/run/docker.sock
+    ```
+
+
 # References
 Using Docker with Pipeline [[1]]  
 Adding docker execution environment for Jenkins [[2]]  

@@ -1,0 +1,89 @@
+ pipeline {
+    agent any
+    parameters {
+      // Commit branch
+      string(name: 'CI_COMMIT_BRANCH', defaultValue: 'master', description: 'Branch')
+      // Source code repository
+      string(name: 'CI_PROJECT_URL', defaultValue: 'https://gitlab.com/pedric-checkmarx/gitlab-cxflow/jvl.git', description: 'GitLab Repository')
+       // MAVEN mavenSettingsConfig
+      string(name: 'MVN_SETTINGS_CONFIG', defaultValue: '5bbf5bde-d064-4f64-a9a4-018a446fa688', description: 'Maven settings.xml specified on Jenkins Manage Jenkins > Managed File')
+      // CxSCA project name
+      string(name: 'PROJECT_NAME', defaultValue: 'JavaVulnerableLab_CxResolver', description: 'SCA Project Name')
+      //CxSCA username
+      string(name: 'SCA_USERNAME', defaultValue: '', description: 'CxSCA username')
+      //CxSCA password
+      string(name: 'SCA_PASSWORD', defaultValue: '', description: 'CxSCA password')
+      //CxSCA tenant
+      string(name: 'SCA_TENANT', defaultValue: '', description: 'CxSCA account')
+      //CxSAST username
+      string(name: 'SAST_USERNAME', defaultValue: '', description: 'CxSAST username')
+      //CxSAST password
+      string(name: 'SAST_PASSWORD', defaultValue: '', description: 'CxSAST password')
+      //CxSAST project
+      string(name: 'SAST_PROJECT', defaultValue: '', description: 'CxSAST project name')
+      //CxSAST server
+      string(name: 'SAST_SERVER', defaultValue: '', description: 'CxSAST server')
+    }
+    
+    stages {
+        stage('Cleanup') {
+            steps{
+                cleanWs()
+            }
+        }
+        stage('Checkout') {
+            steps {
+                sh 'echo "Get some code from an SCM"'
+                 checkout([$class: 'GitSCM',
+                    branches: [[name: "refs/heads/${params.CI_COMMIT_BRANCH}"]],
+                    doGenerateSubmoduleConfigurations: false,
+                    extensions: [],
+                    submoduleCfg: [],
+                    userRemoteConfigs: [[credentialsId: 'Gitlab', url: "${params.CI_PROJECT_URL}"]]
+                    ])
+            }
+        }
+        stage('Build') {
+            steps{
+                 withMaven(
+                    // Maven installation declared in the Jenkins "Global Tool Configuration"
+                    maven: 'maven3', // (1)
+                    // Use `$WORKSPACE/.repository` for local repository folder to avoid shared repositories
+                    mavenLocalRepo: '.repository', // (2)
+                    // Maven settings.xml file defined with the Jenkins Config File Provider Plugin
+                    // We recommend to define Maven settings.xml globally at the folder level using
+                    // navigating to the folder configuration in the section "Pipeline Maven Configuration / Override global Maven configuration"
+                    // or globally to the entire master navigating to  "Manage Jenkins / Global Tools Configuration"
+                    mavenSettingsConfig: "${params.MVN_SETTINGS_CONFIG}" // (3)
+                ) {
+                    // Run the maven build
+                    sh "mvn compile package"
+                }
+            }
+        }
+        stage('CxSCA') {
+            steps {
+                sh "curl https://sca-downloads.s3.amazonaws.com/cli/latest/ScaResolver-linux64.tar.gz --output resolver.tar.gz"
+                sh "mkdir resolver"
+                sh "tar -xf resolver.tar.gz -C resolver"
+                sh """
+                    resolver/ScaResolver \
+                    -s . \
+                    -n '${params.PROJECT_NAME}' \
+                    -a '${params.SCA_TENANT}' \
+                    -u '${params.SCA_USERNAME}' \
+                    -p '${params.SCA_PASSWORD}' \
+                    -e '.repository' \
+                    --server_url 'https://api-sca.checkmarx.net' \
+                    --authentication-server-url 'https://platform.checkmarx.net' \
+                    --cxuser '${params.SAST_USERNAME}' \
+                    --cxpassword '${params.SAST_PASSWORD}' \
+                    --cxprojectname '${params.SAST_PROJECT}' \
+                    --cxserver '${params.SAST_SERVER}'
+                """
+                
+            }
+        }
+        
+    }
+}
