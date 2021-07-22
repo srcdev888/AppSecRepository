@@ -1,7 +1,7 @@
 # CxFlow with Jenkins and Jira
 
 * Author:   Pedric Kng  
-* Updated:  10 Aug 2020
+* Updated:  22-Jul-21
 
 ## Overview
 This guide documents the CxFlow integration for;
@@ -10,6 +10,8 @@ This guide documents the CxFlow integration for;
 3. Fail build upon detecting occurences of filtered issues by severity level
 
 CxFlow can also support Jenkins declarative/scripted pipeline, and has flexibilty in implementation e.g., Library or Web service/Docker containter
+
+For scripted pipeline refer to this [Jenkinsfile](Jenkinsfile)
 
 ***
 
@@ -132,6 +134,10 @@ CxFlow can also support Jenkins declarative/scripted pipeline, and has flexibilt
 6. Break pipeline upon occurences of filtered issues by severity
    ![Fail Jenkins pipeline](assets/Jenkins_Pipeline_Start.png)
    ![CxFlow Break build](assets/Jenkins_ConsoleOutput.png)
+
+
+## Equivalent Jenkins scripted pipeline 
+See [Jenkinsfile](Jenkinsfile)
 
 ## References
 Cx-Flow Github [[1]]  

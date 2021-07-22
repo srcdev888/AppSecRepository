@@ -1,0 +1,119 @@
+node {
+    properties([
+        parameters([
+            // Checkmarx project name
+            string(name: 'PROJECT_NAME', defaultValue: 'JVLCxflow', description: 'Project Name'),
+
+            // Source code repository
+            string(name: 'GIT_PROJECT_URL', defaultValue: 'https://gitlab.com/pedric-checkmarx/gitlab-cxflow/jvl.git', description: 'GitLab Repository'),
+            // Commit reference
+            string(name: 'GIT_COMMIT_REF_NAME', defaultValue: 'mycommit', description: 'Commit reference'),
+            // Commit branch
+            string(name: 'GIT_COMMIT_BRANCH', defaultValue: 'master', description: 'Branch'),
+
+            // MAVEN mavenSettingsConfig
+            string(name: 'MVN_SETTINGS_CONFIG', defaultValue: '5bbf5bde-d064-4f64-a9a4-018a446fa688', description: 'Maven settings.xml specified on Jenkins Manage Jenkins > Managed File'),
+    
+            // Checkmarx server URL
+            string(name: 'SAST_BASE_URL', defaultValue: 'http://192.168.137.50', description: 'CxSAST Server URL'),
+            // Checkmarx project team is hardcoded to CxServer
+            string(name: 'SAST_TEAM', defaultValue: '/CxServer/CxFlow', description: 'CxSAST Project Team e.g.,/CxServer/SP/Corp'),
+    
+            //Checkmarx username
+            string(name: 'SAST_USERNAME', defaultValue: 'administrator', description: 'CxSAST username'),
+            //Checkmarx password
+            string(name: 'SAST_PASSWORD', defaultValue: '<password>', description: 'CxSAST password'),
+            //CxSAST scan preset
+            string(name: 'SAST_SCAN_PRESET', defaultValue: 'Checkmarx Default', description: 'Scan preset'),
+
+
+            //CxSCA username
+            string(name: 'SCA_USERNAME', defaultValue: '', description: 'CxSCA username'),
+            //CxSCA password
+            string(name: 'SCA_PASSWORD', defaultValue: '', description: 'CxSCA password'),
+            //CxSCA tenant
+            string(name: 'SCA_TENANT', defaultValue: '', description: 'CxSCA account'),
+
+            //JIRA URL
+            string(name: 'JIRA_URL', defaultValue: '', description: 'Jira URL'),
+            //JIRA username
+            string(name: 'JIRA_USERNAME', defaultValue: '', description: 'Jira username'),
+            //JIRA password
+            string(name: 'JIRA_TOKEN', defaultValue: '', description: 'Jira token')
+            
+        ])
+    ])
+    
+    cleanWs()
+    
+    sh 'echo "Get some code from an SCM"'
+    checkout([$class: 'GitSCM',
+    branches: [[name: "refs/heads/${params.GIT_COMMIT_BRANCH}"]],
+    doGenerateSubmoduleConfigurations: false,
+    extensions: [],
+    submoduleCfg: [],
+    userRemoteConfigs: [[credentialsId: 'Gitlab', url: "${params.GIT_PROJECT_URL}"]]
+    ])
+
+    stage('Resolve dependencies'){
+        withMaven(
+            // Maven installation declared in the Jenkins "Global Tool Configuration"
+            maven: 'maven3', // (1)
+            // Use `$WORKSPACE/.repository` for local repository folder to avoid shared repositories
+            mavenLocalRepo: '.repository', // (2)
+            // Maven settings.xml file defined with the Jenkins Config File Provider Plugin
+            // We recommend to define Maven settings.xml globally at the folder level using
+            // navigating to the folder configuration in the section "Pipeline Maven Configuration / Override global Maven configuration"
+            // or globally to the entire master navigating to  "Manage Jenkins / Global Tools Configuration"
+            mavenSettingsConfig: "${params.MVN_SETTINGS_CONFIG}" // (3)
+        ) {
+            // Run the maven build
+            sh "mvn compile package"
+        }
+    }
+
+    stage('Execute CxFlow'){
+        sh """
+            java -Xms512m -Xmx2048m -Djava.security.egd=file:/dev/./urandom \
+            -jar `ls /cx*.jar` \
+            --scan \
+            --f='$WORKSPACE' \
+            --app='${params.PROJECT_NAME}' \
+            --cx-project='${params.PROJECT_NAME}' \
+            --checkmarx.version='9.0' \
+            --checkmarx.client-id='resource_owner_client' \
+            --checkmarx.client-secret='014DF517-39D1-4453-B7B3-9930C563627C' \
+            --checkmarx.scope='access_control_api sast_rest_api' \
+            --checkmarx.base-url='${params.SAST_BASE_URL}' \
+            --checkmarx.username='${params.SAST_USERNAME}' \
+            --checkmarx.password='${params.SAST_PASSWORD}' \
+            --checkmarx.team='${params.SAST_TEAM}' \
+            --checkmarx.scan-preset='${params.SAST_SCAN_PRESET}' \
+            --checkmarx.incremental='true' \
+            --sca.appUrl='https://sca.checkmarx.net' \
+            --sca.apiUrl='https://api-sca.checkmarx.net' \
+            --sca.accessControlUrl='https://platform.checkmarx.net' \
+            --sca.tenant='${params.SCA_TENANT}' \
+            --sca.username='${params.SCA_USERNAME}' \
+            --sca.password='${params.SCA_PASSWORD}' \
+            --cx-flow.zip-exclude='.repository' \
+            --cx-flow.bug-tracker='JIRA' \
+            --cx-flow.filter-severity='High' \
+            --cx-flow.break-build='true' \
+            --cx-flow.enabled-vulnerability-scanners='sca, sast' \
+            --jira.url='${params.JIRA_URL}' \
+            --jira.username='${params.JIRA_USERNAME}' \
+            --jira.token='${params.JIRA_TOKEN}' \
+            --jira.project='${params.PROJECT_NAME}' \
+            --jira.issue-type='Bug' \
+            --jira.priorities.High='High' \
+            --jira.priorities.Medium='Medium' \
+            --jira.priorities.Low='Low' \
+            --jira.priorities.informational='Lowest' \
+            --jira.open-transition='In Progress' \
+            --jira.close-transition='Done' \
+            --jira.open-status='Backlog, Selected for Development, In Progress' \
+            --jira.closed-status='Done'
+        """
+    }
+}
