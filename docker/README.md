@@ -70,6 +70,11 @@ docker exec --user="root" -it bamboo-server /bin/bash
  docker build -t <username/container:tag>
 ```
 
+* Run container interactively, override entrypoint
+```bash
+sudo docker run -it --entrypoint /bin/bash [docker_image]
+```
+
 ## Dockerhub 
 * Pushing image to Dockerhub registry
 ```bash
