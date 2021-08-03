@@ -1,0 +1,232 @@
+// Declarative Pipeline
+pipeline {
+    
+    agent any
+    
+    parameters {
+      // Git Tag
+      string(name: 'GIT_TAG', defaultValue: 'v8.1.0_env', description: 'Git tag')
+      
+      // WEBGoat version
+      string(name: 'APP_VERSION', defaultValue: 'v8.1.0', description: 'Git tag')
+      
+      // MAVEN mavenSettingsConfig
+      string(name: 'MVN_SETTINGS_CONFIG', defaultValue: '', description: 'Maven settings.xml specified on Jenkins Manage Jenkins > Managed File')
+      
+      string(name: 'HOSTNODE', defaultValue: '192.168.137.47', description: 'IP address or machine name where webgoat is deployed')
+      
+      string(name: 'IAST_URL', defaultValue: '192.168.137.70', description: 'IAST URL')
+      
+      string(name: 'IAST_PORT', defaultValue: '8370', description: 'IAST PORT')
+      
+      string(name: 'IAST_USERNAME', defaultValue: 'admin', description: 'IAST username')
+      
+      string(name: 'IAST_PASSWORD', defaultValue: '', description: 'IAST password')
+      
+      string(name: 'JIRA_URL', defaultValue: 'https://cxdemosg.atlassian.net', description: 'JIRA URL')
+      
+      string(name: 'JIRA_PROJECT', defaultValue: 'CXFLOW', description: 'JIRA PROJECT')
+      
+      string(name: 'JIRA_USERNAME', defaultValue: 'cxdemosg@gmail.com', description: 'JIRA username')
+      
+      string(name: 'JIRA_TOKEN', defaultValue: '', description: 'JIRA token')
+      
+      
+    }
+    
+    environment {
+        gitUrl = 'https://github.com/cx-demo/WebGoat.git'
+        
+        webGoatimageName = "webgoat-server:${params.APP_VERSION}"
+        webWolfImageName = "webwolf:${params.APP_VERSION}"
+        dockerWebGoatImage = ''
+        dockerWebWolfImage = ''
+        
+        appUrl = "http://${params.HOSTNODE}:8080/WebGoat/login"
+        containerWebGoat = ''
+        containerWebWolf = ''
+       
+    }
+    
+	stages{
+        stage('Pull Source') {
+            steps{
+                checkout([
+                 $class: 'GitSCM',
+                 branches: [[name: "refs/tags/${params.GIT_TAG}"]],
+                 userRemoteConfigs: [[
+                    url: "${gitUrl}",
+                    credentialsId: '',
+                 ]]
+                ])    
+            }
+        }
+        stage('Build source'){
+            steps{
+                echo 'build source'
+                withMaven(
+                    // Maven installation declared in the Jenkins "Global Tool Configuration"
+                    maven: 'maven3', // (1)
+                    
+                    // Use `$WORKSPACE/.repository` for local repository folder to avoid shared repositories
+                    //mavenLocalRepo: '.repository', // (2)
+                    
+                    // Maven settings.xml file defined with the Jenkins Config File Provider Plugin
+                    // We recommend to define Maven settings.xml globally at the folder level using
+                    // navigating to the folder configuration in the section "Pipeline Maven Configuration / Override global Maven configuration"
+                    // or globally to the entire master navigating to  "Manage Jenkins / Global Tools Configuration"
+                    mavenSettingsConfig: "${params.MVN_SETTINGS_CONFIG}" // (3)
+                ) {
+                    // Run the maven build
+                    sh "mvn -DskipTests install"
+                }
+                
+                
+            }
+        }
+        stage('Build docker, push to registry'){
+            steps{
+                echo 'build docker'
+                    
+                dir("./webgoat-server") {
+                    sh "pwd"
+                    script{
+                        dockerWebGoatImage = docker.build("${webGoatimageName}", "--build-arg webgoat_version=${params.APP_VERSION} -f Dockerfile .")
+                        // Push to docker registry
+                        //dockerImage.push()    
+                    }
+                }
+                
+                dir("./webwolf") {
+                    sh "pwd"
+                    script{
+                        dockerWebWolfImage = docker.build("${webWolfImageName}", "--build-arg webwolf_version=${params.APP_VERSION} -f Dockerfile .")
+                    }
+                }
+                
+            }
+        }
+        stage('Deploy Instrumented Application'){
+            steps{
+                echo 'Deploy Instrumented Application'
+                
+                script {
+                    dockerWebGoatImage = docker.image('${webGoatimageName}')
+                    //dockerImage.pull()
+                    containerWebGoat = dockerWebGoatImage.run("-it --env JAVA_TOOL_OPTIONS='-javaagent:/tmp/agent/cx-launcher.jar -DcxScanTag=Webgoat8-${BUILD_NUMBER}' --volume /demos/webgoat8/agent:/tmp/agent --name webgoat --network my-net -p 8080:8080 -p 9001:9001")    
+                
+                }
+                
+                // Wait for application to be up
+                sleep time: 120, unit: 'SECONDS'
+                
+                timeout(5) {
+                    waitUntil {
+                        script {
+                            try{
+                                final String url = "${appUrl}" 
+                                def http_code  = sh(script: "curl -sLik -o /dev/null -w '%{http_code}' ${url}", returnStdout: true) as Integer 
+                                
+                                echo "${http_code}"
+                                return (http_code == 200)
+                            }
+                            catch(err) {
+                                echo "Caught: ${err}"
+                                return false
+                            }
+                        }
+                    }
+                }
+                
+                script {
+                     // Start WebWolf
+                    dockerWebWolfImage = docker.image('${webWolfImageName}')
+                    //dockerImage.pull()
+                    containerWebWolf = dockerWebWolfImage.run("--name webwolf --network my-net -p 9090:9090",  "--spring.datasource.url=jdbc:hsqldb:hsql://webgoat:9001/webgoat --server.address=0.0.0.0" )    
+                }
+                
+                // Wait for application to be up
+                sleep time: 60, unit: 'SECONDS'
+                
+            }
+        }
+        stage('Functional Test'){
+            steps{
+                echo 'Functional Test'
+               
+                dir("./webgoat-integration-tests") {
+                    
+                    script {
+                        
+                        try{
+                            sh "mvn -DWEBGOAT_HOSTNAME=${params.HOSTNODE} -DWEBWOLF_HOSTNAME=${params.HOSTNODE} test"    
+                        }catch(err){
+                            echo "Failed: ${err}"
+                        }
+                    }
+                    
+                }        
+                
+            }
+        }
+        stage('Process scan results'){
+            steps{
+                echo 'Process scan results'
+                script {
+                    docker.image('checkmarx/cx-flow:1.6.22-8').inside("--entrypoint ''") {
+                        sh 'printenv'
+                        sh 'echo BUILD_NUMBER: ${BUILD_NUMBER}'
+                        sh 'echo APP_VERSION: ${APP_VERSION}'
+                        sh """
+                            java -Xms512m -Xmx1024m -Djavax.net.debug=ssl,handshake \
+                                -Djava.security.egd='file:/dev/./urandom' \
+                                -jar /app/cx-flow.jar \
+                                --iast \
+                                --cx-flow.bug-tracker=jira \
+                                --assignee=${params.JIRA_USERNAME} \
+                                --scan-tag=Webgoat8-${BUILD_NUMBER} \
+                                --repo-name=webgoat8 \
+                                --branch=${APP_VERSION} \
+                                --iast.url='http://${params.IAST_URL}' \
+                                --iast.manager-port=${params.IAST_PORT} \
+                                --iast.username=${params.IAST_USERNAME} \
+                                --iast.password=${params.IAST_PASSWORD} \
+                                --iast.update-token-seconds=250 \
+                                --iast.filter-severity=high \
+                                --iast.filter-severity=medium \
+                                --iast.thresholds-severity.high=1 \
+                                --iast.thresholds-severity.medium=3 \
+                                --iast.thresholds-severity.low=10 \
+                                --iast.thresholds-severity.info=-1 \
+                                --jira.url=${params.JIRA_URL} \
+                                --jira.username=${params.JIRA_USERNAME} \
+                                --jira.token=${params.JIRA_TOKEN} \
+                                --jira.project=${params.JIRA_PROJECT} \
+                                --jira.issue-type=Bug \
+                                --cx-flow.break-build=true
+                        """
+                    }
+                }
+            }
+        }
+    }
+    
+    
+    post { 
+        always {
+            echo 'I will always say Goodbye !'
+            
+            script {
+                try{
+                    containerWebGoat.stop()
+                    containerWebWolf.stop()    
+                }catch(exc) {
+                    echo 'Something failed, I should sound the klaxons!'
+                }
+            }
+            
+        }
+    }
+    
+
+}

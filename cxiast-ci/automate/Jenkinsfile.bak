@@ -1,0 +1,134 @@
+// Declarative Pipeline example based on Selenium 
+pipeline {
+    
+    agent any
+    
+    environment {
+        appUrl = "http://192.168.137.47:8080/WebGoat/login"
+        imageName = "webgoat/webgoat-8.0:v8.0.0.M21"
+        dockerImage = ''
+        container = ''
+        testImageName = "webgoat8-selenium"
+    }
+    
+	stages{
+        /* Cleanup workspace */
+        stage('clean') {
+            steps {
+                deleteDir() /* Clean up our workspace */
+            }
+        }
+        /* Pull container */
+        stage('Pull App Container') {
+            steps{
+                echo 'entering container pull stage'
+                script {
+                    dockerImage = docker.image('${imageName}')
+                    dockerImage.pull()
+                    
+                    
+                }
+            }
+        }
+        
+        stage('Deploy Instrumented Application') {
+            steps{
+                echo 'Deploy Instrumented Application'
+                script {
+                    container = dockerImage.run("-it --env JAVA_TOOL_OPTIONS='-javaagent:/tmp/agent/cx-launcher.jar -DcxScanTag=Webgoat8-M21-${BUILD_NUMBER}' --volume /demos/webgoat8/agent:/tmp/agent -p 8080:8080")    
+                }
+                // Wait for application to be up
+                sleep time: 180, unit: 'SECONDS'
+                
+                timeout(5) {
+                    waitUntil {
+                        script {
+                            try{
+                                final String url = "${appUrl}" 
+                                def http_code  = sh(script: "curl -sLik -o /dev/null -w '%{http_code}' ${url}", returnStdout: true) as Integer 
+                                echo "${http_code}"
+                                return (http_code == 200)
+                            }
+                            catch(err) {
+                                echo "Caught: ${err}"
+                                return false
+                            }
+                        }
+                    }
+                }    
+            }
+        }
+        
+        stage('Functional Test'){
+            steps{
+                echo 'Deploy Instrumented Application'
+                script {
+                    def n = 10
+                    n.times {
+                        invokeTest("192.168.137.47","8080", 30)
+                    }
+                }
+            }
+        }
+        
+        stage('Process scan results'){
+            steps{
+                echo 'Process scan results'
+                script {
+                    docker.image('checkmarx/cx-flow:1.6.22-8').inside("--entrypoint ''") {
+                        sh 'printenv'
+                        sh '''
+                            java -Xms512m -Xmx1024m -Djavax.net.debug=ssl,handshake \
+                                -Djava.security.egd='file:/dev/./urandom' \
+                                -jar /app/cx-flow.jar \
+                                --iast \
+                                --cx-flow.bug-tracker=jira \
+                                --assignee="cxdemosg@gmail.com" \
+                                --scan-tag=Webgoat8-M21-${BUILD_NUMBER} \
+                                --repo-name=webgoat8 \
+                                --branch=M21 \
+                                --iast.url="http://192.168.137.70" \
+                                --iast.manager-port=8380 \
+                                --iast.username=admin \
+                                --iast.password=<password> \
+                                --iast.update-token-seconds=250 \
+                                --iast.filter-severity=high \
+                                --iast.filter-severity=medium \
+                                --iast.thresholds-severity.high=1 \
+                                --iast.thresholds-severity.medium=3 \
+                                --iast.thresholds-severity.low=10 \
+                                --iast.thresholds-severity.info=-1 \
+                                --jira.url="https://cxdemosg.atlassian.net" \
+                                --jira.username="cxdemosg@gmail.com" \
+                                --jira.token=<token> \
+                                --jira.project=CXFLOW \
+                                --jira.issue-type=Bug \
+                                --cx-flow.break-build=true
+                        '''
+                    }
+                }
+            }
+        }
+    }
+    post { 
+        always {
+            echo 'I will always say Hello again!'
+            script {
+                try{
+                    container.stop()    
+                }catch(exc) {
+                    echo 'Something failed, I should sound the klaxons!'
+                }
+            }
+        }
+    }
+}
+
+def invokeTest(String url, String port, int sleepInSeconds) {
+    catchError {
+        docker.image("${testImageName}").withRun("-it --env ENV_AUT_URL='${url}' --env ENV_AUT_PORT='${port}'"){
+            echo "Test Suite"
+        }
+    }
+    sh "sleep ${sleepInSeconds}"
+}
