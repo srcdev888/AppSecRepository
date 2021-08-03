@@ -27,7 +27,7 @@ In this article, we will build a Jenkins Pipeline that demostrates CxIAST testin
 4. [Automated Functional Testing](#Automated-Functional-Testing)
 5. [Orchestrate Jira ticketing with CxFlow](#Orchestrate-Jira-ticketing-with-CxFlow)
 
-The sample Jenkins pipeline script is located [here](#Jenkinsfile)
+The sample Jenkins pipeline script is located [here](Jenkinsfile)
 
 
 ### Pull source and build
