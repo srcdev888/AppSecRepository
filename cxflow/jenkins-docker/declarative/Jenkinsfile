@@ -1,0 +1,95 @@
+//Declarative pipeline example of dockerized cxflow
+pipeline {
+    agent any
+    
+    parameters {
+        
+        // Source code repository
+        string(name: 'GIT_PROJECT_URL', defaultValue: 'https://gitlab.com/pedric-checkmarx/gitlab-cxflow/jvl.git', description: 'GitLab Repository')
+        // Commit branch
+        string(name: 'GIT_COMMIT_BRANCH', defaultValue: 'master', description: 'Branch')
+        
+        // Checkmarx server URL
+        string(name: 'SAST_BASE_URL', defaultValue: 'http://192.168.137.50', description: 'CxSAST Server URL')
+        // Checkmarx project team is hardcoded to CxServer
+        string(name: 'SAST_TEAM', defaultValue: '/CxServer/CxFlow', description: 'CxSAST Project Team e.g.,/CxServer/SP/Corp')
+        //Checkmarx username
+        string(name: 'SAST_USERNAME', defaultValue: 'administrator', description: 'CxSAST username')
+        //Checkmarx password
+        string(name: 'SAST_PASSWORD', defaultValue: '', description: 'CxSAST password')
+        //CxSAST scan preset
+        string(name: 'SAST_SCAN_PRESET', defaultValue: 'Checkmarx Express', description: 'Scan preset')
+
+        // Checkmarx project name
+        string(name: 'PROJECT_NAME', defaultValue: 'JVLCxflow', description: 'Project Name')
+        
+    }
+
+    options {
+        // This is required if you want to clean before build
+        skipDefaultCheckout(true)
+    }
+    
+    stages {
+        
+        /* checkout repo */
+        stage('Checkout SCM') {
+            steps {
+                
+                cleanWs()
+                
+                checkout([
+                 $class: 'GitSCM',
+                 branches: [[name: "refs/heads/${params.GIT_COMMIT_BRANCH}"]],
+                 userRemoteConfigs: [[
+                    url: "${params.GIT_PROJECT_URL}",
+                    credentialsId: 'Gitlab',
+                 ]]
+                ])
+            }
+        }
+        stage('Execute CxFlow') {
+             agent {
+                docker {
+                    image 'checkmarx/cx-flow:latest'
+                    args "--entrypoint ''"
+                    // Run the container on the node specified at the top-level of the Pipeline, in the same workspace, rather than on a new node entirely:
+                    reuseNode true
+                }
+            }
+            steps {
+                sh 'java -version'
+                sh """
+                    java -Xms512m -Xmx2048m -Djava.security.egd=file:/dev/./urandom \
+                    -jar /app/cx-flow.jar \
+                    --scan \
+                    --f='$WORKSPACE' \
+                    --app='${params.PROJECT_NAME}' \
+                    --branch='${params.GIT_COMMIT_BRANCH}' \
+                    --cx-project='${params.PROJECT_NAME}' \
+                    --checkmarx.version='9.0' \
+                    --checkmarx.client-id='resource_owner_client' \
+                    --checkmarx.client-secret='014DF517-39D1-4453-B7B3-9930C563627C' \
+                    --checkmarx.scope='access_control_api sast_rest_api' \
+                    --checkmarx.base-url='${params.SAST_BASE_URL}' \
+                    --checkmarx.username='${params.SAST_USERNAME}' \
+                    --checkmarx.password='${params.SAST_PASSWORD}' \
+                    --checkmarx.team='${params.SAST_TEAM}' \
+                    --checkmarx.scan-preset='${params.SAST_SCAN_PRESET}' \
+                    --checkmarx.settings-override='true' \
+                    --checkmarx.incremental='false' \
+                    --checkmarx.preserve-xml='true' \
+                    --cx-flow.enabled-vulnerability-scanners='sast' \
+                    --cx-flow.zip-exclude='.*/.repository' \
+                    --cx-flow.filter-severity='High' \
+                    --cx-flow.break-build='true' \
+                    --cx-flow.bug-tracker='CxXml' \
+                    --cx-flow.bug-tracker-impl='CxXml' \
+                    --cx-xml.file-name-format="[PROJECT]-[BRANCH]-[TIME].xml" \
+                    --cx-xml.data-folder= ${WORKSPACE}
+                """
+                
+            }
+        }
+    }
+}

@@ -6,6 +6,9 @@
 ## Overview
 This guide illustrates dockerized cxflow integration for
 1. Jenkins Scripted Pipeline
+    
+    ** If you are using declarative pipeline, the concept are similar. An example Jenkinsfile is also available [[10]]
+
 2. Execute dockerized CxFlow for SAST scan
     - Exclude files from zip upload via folder/file exclusion
     - Fail build upon detecting occurences of new issues
@@ -131,7 +134,6 @@ This guide illustrates dockerized cxflow integration for
     - Download XML report  
     We configure the bug tracker to be XML via ['CX_FLOW_BUG_TRACKER'](Jenkinsfile#L37) whereby the report will be downloaded and persisted in the workspace, see ['checkmarx.preserve-xml'](Jenkinsfile#L57), ['cx-xml.file-name.format'](Jenkinsfile#L58) and ['cx-xml.data-folder'](Jenkinsfile#L59). Refer to [[6]] for other bug tracker integration
 
-
 3. Upon execution scan, the first scan will reflect 'failed' as per policy - new vulnerabilities discovered; an error code 10 will be thrown. 
 
     ![Failed upon new vulnerabilities](assets/Failed_new_vulnerabilities.png)
@@ -148,6 +150,7 @@ CxFlow Bug Trackers and Feedback Channels [[6]]
 CxFlow Excluding Files from Zip Archive [[7]]  
 CxFlow Filtering & Break builds [[8]]
 CxFlow Execution [[9]]  
+Declarative pipeline example[[10]]
 
 [1]: https://docs.gitlab.com/ee/integration/jenkins.html "Jenkins CI service"
 [2]:https://github.com/cx-demo/myjenkins#adding-docker-execution-environment-for-jenkins "Adding docker execution environment for Jenkins"
@@ -158,6 +161,7 @@ CxFlow Execution [[9]]
 [7]:https://github.com/checkmarx-ltd/cx-flow/wiki/Excluding-Files-from-Zip-Archive "Excluding Files from Zip Archive"  
 [8]:https://github.com/checkmarx-ltd/cx-flow/wiki/Configuration#filtering "Filtering"  
 [9]:https://github.com/checkmarx-ltd/cx-flow/wiki/Execution "Execution"
+[10]:declarative/Jenkinsfile "Declarative pipeline example"
 
 <!-- Cx-Flow Github [[1]]  
 Cx-Flow Demo/Development Instance [[2]]  
