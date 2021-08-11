@@ -6,8 +6,11 @@ This page describes the CxQL queries provided by the ASA team for WebGoat.NetCor
 
 ***
 
+The below queries is tested on CxSAST v9.4
+
+## General\Find_Outputs
+
 ```csharp
-# General\Find_Outputs
 
 result = base.Find_Outputs();
 
@@ -26,8 +29,10 @@ result.Add(xmlDocument);
 
 ```
 
+## CSharp_Medium_Threat
+
 ```csharp
-# CSharp_Medium_Threat
+
 
 /*
 * Author: antonio.duarte@checkmarx.com
@@ -85,8 +90,10 @@ result += All.FindByRegexExt("rappayne").FindByFileName("*.txt");
 
 ```
 
+## CSharp_High_Risk
+
 ```csharp
-# CSharp_High_Risk
+
 
 result = base.SQL_Injection();
 
