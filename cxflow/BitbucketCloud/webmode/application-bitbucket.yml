@@ -1,0 +1,92 @@
+server:
+  port: 8982
+logging:
+  file: flow.log
+  level:
+    com:
+      checkmarx:
+        flow: TRACE
+        
+cxflow:
+  bug-tracker: None
+  branches: 
+    - master
+  enabled-vulnerability-scanners: 
+    - sast
+  filter-severity:
+    - High
+    - Medium
+  filter-category:
+  filter-cwe:
+  filter-status:
+  #thresholds:
+  #  high: 10
+  #  medium: 10
+  break-build: true  
+  # comment-script: ./mycomments.groovy
+
+checkmarx:
+  version: 9.4
+  username: <username>
+  password: <password>
+  client-id: resource_owner_client
+  client-secret: 014DF517-39D1-4453-B7B3-9930C563627C
+  scope: access_control_api sast_rest_api
+  base-url: <CxSAST URL>
+  multi-tenant: true
+  incremental: true
+  configuration: Default Configuration
+  scan-preset: Checkmarx Default
+  team: <CxSAST team>
+  url: ${checkmarx.base-url}/cxrestapi
+  portal-url: ${checkmarx.base-url}/cxwebinterface/Portal/CxWebService.asmx
+  sdk-url: ${checkmarx.base-url}/cxwebinterface/SDK/CxSDKWebService.asmx
+  portal-wsdl: ${checkmarx.base-url}/Portal/CxWebService.asmx?wsdl
+  sdk-wsdl: ${checkmarx.base-url}/SDK/CxSDKWebService.asmx?wsdl
+  # project-script: ./myproject.groovy
+
+bitbucket:
+  webhook-token: <webhook token>
+  token: <username>:<App Password>
+  url: https://api.bitbucket.org
+  api-path: /2.0
+  block-merge: true
+  error-merge: true
+  
+jira:
+  url: https://cxdemosg.atlassian.net/
+  username: <jira username>
+  token: <jira token>
+  project: JVLG
+  issue-type: Bug
+  priorities:
+    High: High
+    Medium: Medium
+    Low: Low
+    Informational: Lowest
+  open-transition: In Progress
+  close-transition: Done
+  open-status:
+    - Backlog
+    - Selected for Development
+    - In Progress
+  closed-status:
+    - Done
+  fields:
+    - type: result
+      name: application
+      jira-field-name: Application
+      jira-field-type: label
+    - type: result
+      name: cwe
+      jira-field-name: CWEs
+      jira-field-type: label
+    - type: result
+      name: category
+      jira-field-name: Category
+      jira-field-type: label
+    - type: result
+      name: loc
+      jira-field-name: LOC
+      jira-field-type: label
+      jira-default-value: XXXXX  
