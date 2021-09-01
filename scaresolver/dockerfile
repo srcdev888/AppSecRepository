@@ -1,0 +1,21 @@
+FROM alpine:latest
+
+ARG VERSION
+RUN echo ${VERSION}
+
+WORKDIR /opt/sca
+
+RUN apk update
+RUN apk add ca-certificates
+RUN apk add libstdc++ glib krb5 pcre bash
+RUN apk add curl npm git
+RUN npm -g install npm@6.14.12
+RUN npm install -g lerna
+
+RUN curl -O https://sca-downloads.s3.amazonaws.com/cli/${VERSION}/ScaResolver-musl64.tar.gz && \
+    tar -xf ScaResolver-musl64.tar.gz && \
+    rm -rf ScaResolver-musl64.tar.gz && \
+    chmod +x ScaResolver && \
+    ls -la
+
+ENTRYPOINT [ "./ScaResolver"]
