@@ -12,7 +12,7 @@ In this article, we will build a Jenkins Pipeline that demostrates CxIAST testin
 
 ## Pre-requisites
 - Installed All-in-One Jenkins that supports capability to execute Docker command
-- Access to forked Webgoat Github repository [[2]]
+- Access to forked Webgoat Github repository [[1]]
   - The Webgoat is altered to allow specifying target URL with the integration test 
 - Setup a docker bridge network to allow connection between the running containers
   ```bash
