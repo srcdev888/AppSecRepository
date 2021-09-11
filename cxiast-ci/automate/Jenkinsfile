@@ -17,7 +17,7 @@ pipeline {
       
       string(name: 'IAST_URL', defaultValue: '192.168.137.70', description: 'IAST URL')
       
-      string(name: 'IAST_PORT', defaultValue: '8370', description: 'IAST PORT')
+      string(name: 'IAST_PORT', defaultValue: '8380', description: 'IAST PORT')
       
       string(name: 'IAST_USERNAME', defaultValue: 'admin', description: 'IAST username')
       
@@ -77,8 +77,14 @@ pipeline {
                     // or globally to the entire master navigating to  "Manage Jenkins / Global Tools Configuration"
                     mavenSettingsConfig: "${params.MVN_SETTINGS_CONFIG}" // (3)
                 ) {
-                    // Run the maven build
-                    sh "mvn -DskipTests install"
+                    script{
+                        // Run the maven build
+                        if (isUnix()) {
+                            sh "mvn -DskipTests install"    
+                        } else {
+                            bat "mvn -DskipTests install"    
+                        }
+                    }
                 }
                 
                 
@@ -89,7 +95,6 @@ pipeline {
                 echo 'build docker'
                     
                 dir("./webgoat-server") {
-                    sh "pwd"
                     script{
                         dockerWebGoatImage = docker.build("${webGoatimageName}", "--build-arg webgoat_version=${params.APP_VERSION} -f Dockerfile .")
                         // Push to docker registry
@@ -98,7 +103,6 @@ pipeline {
                 }
                 
                 dir("./webwolf") {
-                    sh "pwd"
                     script{
                         dockerWebWolfImage = docker.build("${webWolfImageName}", "--build-arg webwolf_version=${params.APP_VERSION} -f Dockerfile .")
                     }

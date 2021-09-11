@@ -13,7 +13,10 @@ tail -f /var/log/syslog
   sudo systemctl status ssh
   sudo ufw allow ssh
   ```
-
+## Install Maven
+  ```bash
+  sudo apt-get install maven
+  ```
 ## Dotnet SDK Installation
   ```bash
   wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb

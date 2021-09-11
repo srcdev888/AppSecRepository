@@ -86,3 +86,62 @@ docker image push <repo>/<remote_image>:<tag>
 ```
 
 ## Docker compose commands
+
+
+
+## Docker Desktop
+
+* Enable nested virtualization
+```powershell
+# Get list of vm, and their name
+Get-VM
+
+# Set nested virtualization for VM
+Set-VMProcessor 
+
+```
+
+
+## Common Troubleshooting
+
+* Permission denied connecting to the Docker Daemon socket
+
+    ```bash
+    # Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Post http://%2Fvar%2Frun%2Fdocker.sock/v1.39/images/create?fromImage=webgoat%2Fwebgoat-8.0&tag=v8.0.0.M21: dial unix /var/run/docker.sock: connect: permission denied
+
+    sudo chmod 666 /var/run/docker.sock
+    ```
+
+* Mounted volume not readable or writeable
+
+    If the mounted volume is not readable/writeable in the container, it is due to the user in the container having different userid:groupid than the user on the host.
+
+    To get around this is to start the container without the (problematic) volume mapping, then run bash on the container:
+
+    ```bash
+    docker run -p 8080:8080 -p 50000:50000 -it jenkins bin/bash
+    
+    id
+    
+    # Once inside the container's shell run the id command and you'll get results like:
+    #uid=1000(jenkins) gid=1000(jenkins) groups=1000(jenkins)
+
+    #Exit the container, go to the folder you are trying to map and run:
+    chown -R 1000:1000 .
+
+    ```
+
+    With the permissions now matching, you should be able to run the original docker command with the volume mapping.
+
+* Jenkins pipeline Job can't find script due to temp path @tmp....
+
+    Issue is likely due to Jenkins host symlinks bin/sh to dash; not bash
+
+    Adding "/bin/sh" to the "Shell Executable" option under "Manage Jenkins -> Configure System" will help to resolve it.
+
+
+## References
+host volume not writable [[1]]
+
+[1]:https://stackoverflow.com/questions/44065827/jenkins-wrong-volume-permissions "host volume not writable"
+[2]:https://stackoverflow.com/questions/41246161/jenkins-pipeline-job-cant-find-script-due-to-tmp-path-being-created "can't find script due to tmp oath"

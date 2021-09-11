@@ -174,6 +174,15 @@ In the next stage, we will deploy the instrumented WebGoat via the java environm
     }
 }
 ```
+
+    !!! Note that the following ports are hardcoded in the demo web application - WebGoat and WebWolf. and traffic should be allowed between both containers.
+
+    | Port | Description |
+    | ------------- | ------------- |
+    | 8080 | WebGoat |
+    | 9001 | HSQLDB, hosted in WebGoat |
+    | 9090 | WebWolf |
+
 ### Automated Functional Testing
 
 The functional test suite is based on WebGoat-Integration-tests module, and requires maven to execute.
@@ -204,7 +213,10 @@ stage('Functional Test'){
 
 In this step, we will leverage on CxFlow to process the scan results;
 - Stop the scan based on the SCAN_TAG, and retrieve the results
-- Create jira tickets for new vulnerabilities, note applied 'filter-severity'
+- Create jira tickets for new vulnerabilities, and applied 'filter-severity'
+
+        !!! Note that CxFlow only supports creation of new Jira tickets
+
 - Fail pipeline upon exceeding 'threshold-severity'
 
 ```groovy
