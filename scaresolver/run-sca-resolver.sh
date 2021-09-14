@@ -21,4 +21,4 @@ SEVERITY_THRESHOLD='--severity_threshold High'
 # SCA-Resolver will execute dependency check
 # npm i --package-lock-only
 
-docker run --rm -v $NODEGOAT_DIR:/data  cxsca-resolver:1.5.42 $LOG_LEVEL $URL_AUTHSERVER $ACCOUNT $USERNAME $PASSWORD $PROJECT_NAME $SCAN_PATH $SEVERITY_THRESHOLD
+docker run --rm -v $NODEGOAT_DIR:/data  cxsca-resolver:1.5.45 $LOG_LEVEL $URL_AUTHSERVER $ACCOUNT $USERNAME $PASSWORD $PROJECT_NAME $SCAN_PATH $SEVERITY_THRESHOLD

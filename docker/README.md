@@ -85,21 +85,22 @@ docker image push <repo>/<remote_image>:<tag>
 
 ```
 
-## Docker compose commands
 
 
+## HyperV nested virtualization
 
-## Docker Desktop
+    !!! Note that VMName containing special characters are not accepted, and features e.g., dynamic memory is not supported for nested virtualized machine. 
 
 * Enable nested virtualization
-```powershell
-# Get list of vm, and their name
-Get-VM
 
-# Set nested virtualization for VM
-Set-VMProcessor 
+    ```powershell
+    # Get list of vm, and their name
+    Get-VM
 
-```
+    # Set nested virtualization for VM
+    Set-VMProcessor <VMName> -ExposeVirtualizationExtensions $true
+
+    ```
 
 
 ## Common Troubleshooting
