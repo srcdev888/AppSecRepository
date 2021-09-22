@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.22.0 (955b78124)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: cx-engine-server
+  name: cx-engine-server
+  namespace: checkmarx-demo
+spec:
+  ports:
+    - name: "cx-engine-server"
+      port: 8088
+      targetPort: 8088
+  selector:
+    io.kompose.service: cx-engine-server
+status:
+  loadBalancer: {}

@@ -1,0 +1,52 @@
+version: '3'
+services:
+###############################################################################################################
+    cx-engine-server:
+        image: cx-engine-server:latest
+        container_name: cx-engine-server
+        user: $USER
+        restart: always
+        ports:
+            - "0.0.0.0:8088:8088"
+        environment:
+            - CX_ES_MESSAGE_QUEUE_USERNAME=
+            - CX_ES_MESSAGE_QUEUE_PASSWORD=
+            - CX_ES_MESSAGE_QUEUE_URL=tcp://<ip>:<port>
+            - CX_ES_ACCESS_CONTROL_URL=<url>/CxRestAPI/auth
+            - CX_ES_END_POINT=http://1.0.0.127:8088
+            - CX_ENGINE_TLS_ENABLE=false
+        volumes:
+            - /$PWD/checkmarx:/var/checkmarx
+# Ability to change ulimit number of files in parallel
+#        ulimits: 
+#          nofile: 
+#             soft: 1024 
+#             hard: 8096
+###############################################################################################################
+#   cx-engine-server-tls:
+#       image: cx-engine-server:latest
+#       container_name: cx-engine-server
+#       user: $USER
+#       restart: always
+#       ports:
+#           - "0.0.0.0:8088:8088"
+#       environment:
+#           - CX_ES_MESSAGE_QUEUE_USERNAME=
+#           - CX_ES_MESSAGE_QUEUE_PASSWORD=
+#           - CX_ES_MESSAGE_QUEUE_URL=tcp://<ip>:<port>
+#           - CX_ES_ACCESS_CONTROL_URL=<url>/CxRestAPI/auth
+#           - CX_ES_END_POINT=http://1.0.0.127:8088
+#           - CX_ENGINE_TLS_ENABLE=true
+#       volumes:
+#           - /var/checkmarx:/var/checkmarx
+#           - /usr/my/certs/:/app/certificates/      
+#       command: 
+#           - "--cert_filepath"
+#           - "$engine_server_certificate"
+#           - "--cert_password"
+#           - "$engine_server_certificate_password"
+#           - "--mng_cert_filepath" 
+#           - "$manager_certificate"
+#       extra_hosts:
+#           - "<dns>:<ip>"
+###############################################################################################################

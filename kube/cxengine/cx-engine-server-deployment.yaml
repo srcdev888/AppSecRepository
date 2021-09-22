@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.22.0 (955b78124)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: cx-engine-server
+  name: cx-engine-server
+  namespace: checkmarx-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: cx-engine-server
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.22.0 (955b78124)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: cx-engine-server
+    spec:
+      containers:
+        - env:
+            - name: CX_ENGINE_TLS_ENABLE
+              value: "false"
+            - name: CX_ES_ACCESS_CONTROL_URL
+              value: http://192.168.137.50/CxRestAPI/auth
+            - name: CX_ES_END_POINT
+              value: http://127.0.0.1:8088
+            - name: CX_ES_MESSAGE_QUEUE_PASSWORD
+              value: "217070109180237009073095180245165094186241227214"
+            - name: CX_ES_MESSAGE_QUEUE_URL
+              value: tcp://192.168.137.50:61616
+            - name: CX_ES_MESSAGE_QUEUE_USERNAME
+              value: cxuser
+          image: cx-engine-server:latest
+          name: cx-engine-server
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8088
+          resources: {}
+          volumeMounts:
+            - mountPath: /var/checkmarx
+              name: cx-engine-server-claim0
+      restartPolicy: Always
+      volumes:
+        - name: cx-engine-server-claim0
+          persistentVolumeClaim:
+            claimName: cx-engine-server-claim0
+status: {}
