@@ -9,6 +9,7 @@ This series illustrates CxIAST in-works;
 - [Instrumenting WebGoat Legacy Container](docker/README.md)
 - Remediation with CxIAST *Uncompleted*
 - [Automated CxIAST Testing](automate/README.md)
+- [Service Flow](serviceflows/README.md)
 
 <!--
 ## Pre-requisite

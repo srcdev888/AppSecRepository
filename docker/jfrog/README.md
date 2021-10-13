@@ -50,7 +50,7 @@ This article describes how to setup maven private repository with JFrog Artifact
 
 6. Execute maven, using the new settings.xml
    ```bash
-   mvn --settings YourOwnSettings.xml clean install
+   mvn --settings YourOwnSettings.xml clean install deploy
    ```
 
 ## References

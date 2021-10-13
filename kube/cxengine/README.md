@@ -1,7 +1,7 @@
 # Deploying CxSAST Engine on Kubernetes
 
 - Author: Pedric Kng
-- Updated: 19 Aug 2021
+- Updated: 21 Aug 2021
 
 This repository describes the deployment of CxSAST linux engine container on Minikube(K8)
 
