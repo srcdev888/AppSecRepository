@@ -1,0 +1,44 @@
+#
+# Include this file in your .gitlab-ci.yml file to automate & integrate Checkmarx security scans.
+#
+# These variables can be overridden in your .gitlab-ci.yml file or as envionrment variables.
+#
+
+variables:
+  AST_CLI_EXE: "/app/bin/cx"
+  AST_BASE_URI: "https://eu.ast.checkmarx.net/"
+  AST_AGENT: "MyASTCLI"
+  AST_TENANT: "${AST_TENANT}"
+  AST_CLIENT_ID: "${AST_CLIENT_ID}"
+  AST_CLIENT_SECRET: "${AST_CLIENT_SECRET}"
+  AST_PROJECTNAME: "$CI_PROJECT_NAME"
+  AST_SCANTYPE: "sast,sca,kics"
+  SAST_SCAN_PRESET: "Checkmarx Default"
+  OUTPUT_PATH: "cx_result"
+  REPORT_FORMAT: "sarif"
+  PARAMS: ""
+
+ast-scan:
+  stage: test
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+  image:
+    name: checkmarx/ast-cli
+    entrypoint: ['']
+  script:
+    - ${AST_CLI_EXE} scan create 
+        --agent "${AST_AGENT}" 
+        --base-uri "${base_url}" 
+        --tenant "${AST_TENANT}" 
+        --project-name "${AST_PROJECTNAME}" 
+        --branch "${CI_COMMIT_BRANCH}" 
+        --scan-types "${AST_SCANTYPE}" 
+        --sast-preset-name "${SAST_SCAN_PRESET}" 
+        --output-path " ${OUTPUT_PATH}" 
+        --report-format "${REPORT_FORMAT}" 
+        --file-source . 
+        ${PARAMS}
+  artifacts:
+    when: on_success
+    paths:
+      - "${OUTPUT_PATH}"
