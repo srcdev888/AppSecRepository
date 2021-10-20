@@ -1,0 +1,36 @@
+FROM checkmarx/ast-cli:latest
+
+ARG VERSION
+
+RUN echo ${VERSION}
+
+# Install main dependencies
+RUN apt-get update && \
+    apt-get -y install ca-certificates && \
+    apt-get -y install wget && \
+    apt-get -y install locales locales-all
+
+ENV LC_ALL en_US.UTF-8
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US.UTF-8
+
+RUN apt -q install ruby-full -y && \
+    apt-get install -y --no-install-recommends ruby ruby-dev make gcc libcurl4 libc6-dev git && \
+    gem install cocoapods
+
+# Test if pod is installed
+# pod --version --allow-root
+
+WORKDIR /opt/sca
+
+# Download SCA Resolver
+RUN wget https://sca-downloads.s3.amazonaws.com/cli/${VERSION}/ScaResolver-linux64.tar.gz -O ScaResolver-linux64.tar.gz && \
+    tar -xzvf ScaResolver-linux64.tar.gz && \
+    rm -rf ScaResolver-linux64.tar.gz && \
+    chmod +x ScaResolver && \
+    ls -la
+
+# Test if dependencies resolution is possible
+# pod install --allow-root
+
+ENTRYPOINT ["/app/bin/cx"]
