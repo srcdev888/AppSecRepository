@@ -13,10 +13,35 @@ CxAST CLI is available for windows, mac, linux and docker platform
 - Docker: https://hub.docker.com/r/checkmarx/ast-cli
 
 ---
-
 ## Examples
 
-1. Scan execution
+1. Create Project
+
+    ```bash
+    #!/bin/bash -x
+    # Sample on project creation via CxAST CLI
+    # https://checkmarx.atlassian.net/wiki/spaces/AST/pages/2446065669/project
+
+    ## Global Properties
+    agent="MyASTCLI"
+    apikey="<api key>"
+
+    ## Note that there exists US and EU instance
+    base_auth_uri="https://eu.iam.checkmarx.net/"
+    base_url="https://eu.ast.checkmarx.net/"
+    tenant="<tenant>"
+
+    # Project Properties
+    projectName="test-project2"
+
+    # use tags to auto-assign project to application
+    tags="test-project2,test-app"
+
+    ./cx project create -v --agent "$agent" --apikey "$apikey" --base-auth-uri "$base_auth_uri" --base-uri "$base_url" --tenant "$tenant" --project-name "$projectName" --tags "$tags"
+
+    ```
+
+2. Scan execution
 
     The [CxAST CLI Example](cxast-cli-scan-nowait.sh) below illustrates
 
@@ -74,31 +99,7 @@ CxAST CLI is available for windows, mac, linux and docker platform
 
     Equivalent [Windows Example](cxsast-cli-scan-nowait.cmd) also available.
 
-2. Create Project
 
-    ```bash
-    #!/bin/bash -x
-    # Sample on project creation via CxAST CLI
-    # https://checkmarx.atlassian.net/wiki/spaces/AST/pages/2446065669/project
-
-    ## Global Properties
-    agent="MyASTCLI"
-    apikey="<api key>"
-
-    ## Note that there exists US and EU instance
-    base_auth_uri="https://eu.iam.checkmarx.net/"
-    base_url="https://eu.ast.checkmarx.net/"
-    tenant="<tenant>"
-
-    # Project Properties
-    projectName="test-project2"
-
-    # use tags to auto-assign project to application
-    tags="test-project2,test-app"
-
-    ./cx project create -v --agent "$agent" --apikey "$apikey" --base-auth-uri "$base_auth_uri" --base-uri "$base_url" --tenant "$tenant" --project-name "$projectName" --tags "$tags"
-
-    ```
 
 
 ## Miscellaneous

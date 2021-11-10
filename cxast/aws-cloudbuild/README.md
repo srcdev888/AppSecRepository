@@ -7,7 +7,9 @@ This write-up describes the integration of CxAST scan via CLI mode into AWS Code
 
 ---
 
-Add the [buildspec.yml](buildspec.yml) file to the root directory of your source code.
+In this example, we assume that the source code repository is AWS Code Commit.
+
+Add the [buildspec.yml](buildspec.yml) file to the root directory of your source code, and configure AWS CodeBuild accordingly.
 
 ```yml
 #buildspec.yml
