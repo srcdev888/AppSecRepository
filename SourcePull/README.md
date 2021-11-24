@@ -15,6 +15,17 @@ This section highlights the thought process to achieve this scenario.
 4. Should OSA scan be required, remember to configure the OSA location with the shared folder
 5. Invoke scans via 'CxSAST CLI' [[2]]
 
+
+## Miscellenous
+- If the folder to be scanned is located locally, you can specify _'\\localhost\c$\<folder>'_ as the path in the 'Shared folder' option. An important note for the network credentials is 
+
+    | Field | Description |
+    | ---| ---|
+    | Username | Format is typically _'machine name/username'_. Note that the username is case-sensitive  |
+    | Password | User password |
+
+
+
 ## References
 
 Pulling Git repository with Python [[1]]  
